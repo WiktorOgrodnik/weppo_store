@@ -1,0 +1,19 @@
+{
+  "name": "weppo_store",
+  "version": "1.0.0",
+  "description": "Store for Weppo Project",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WiktorOgrodnik/weppo_store.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/WiktorOgrodnik/weppo_store/issues"
+  },
+  "homepage": "https://github.com/WiktorOgrodnik/weppo_store#readme"
+}
