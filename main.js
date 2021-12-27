@@ -2,7 +2,6 @@
 
 import express from 'express';
 import { db } from './dbconnect.js'
-import path from 'path';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -10,11 +9,12 @@ const port = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-app.use("/static", express.static(path.resolve("views", "static")));
+app.use(express.static('./static'));
 app.use(express.urlencoded({extended: true}));
 
-app.get('/*', (req, res) => {
-    res.sendFile(path.resolve("views", "index.html"))
+
+app.get('/', (req, res) => {
+    res.render('index', {});
 });
 
 app.listen(port, () => {
