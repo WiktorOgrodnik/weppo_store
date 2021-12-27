@@ -1,7 +1,7 @@
 'use strict';
 
 import express from 'express';
-import { client } from './dbconnect.js'
+import { db } from './dbconnect.js'
 import path from 'path';
 
 const app = express();
@@ -12,8 +12,6 @@ app.set('views', './views');
 
 app.use("/static", express.static(path.resolve("views", "static")));
 app.use(express.urlencoded({extended: true}));
-
-//client.connect();
 
 app.get('/*', (req, res) => {
     res.sendFile(path.resolve("views", "index.html"))
