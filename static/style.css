@@ -9,3 +9,7 @@ div.stop {
 div.menu-element {
     float: left;
 }
+
+main {
+    height: 200px;
+}

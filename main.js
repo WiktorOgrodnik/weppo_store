@@ -12,9 +12,16 @@ app.set('views', './views');
 app.use(express.static('./static'));
 app.use(express.urlencoded({extended: true}));
 
-
 app.get('/', (req, res) => {
     res.render('index', {});
+});
+
+app.get('/settings', (req, res) => {
+    res.render('settings', {});
+});
+
+app.get('/account', (req, res) => {
+    res.render('account', {});
 });
 
 app.listen(port, () => {
