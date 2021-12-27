@@ -1,7 +1,7 @@
 'use strict';
 
 import express from 'express';
-import { db, rebuiltDatabase } from './dbconnect.js'
+import { db } from './dbconnect.js'
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -12,7 +12,6 @@ app.set('views', './views');
 app.use(express.static('./static'));
 app.use(express.urlencoded({extended: true}));
 
-rebuiltDatabase();
 
 app.get('/', (req, res) => {
     res.render('index', {});
