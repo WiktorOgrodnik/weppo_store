@@ -1,0 +1,11 @@
+div.header-element {
+    float: left;
+}
+
+div.stop {
+    clear: both;
+}
+
+div.menu-element {
+    float: left;
+}
