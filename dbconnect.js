@@ -3,8 +3,8 @@ import Client from "pg/lib/client.js";
 export const db = {
     user: process.env.PGUSER,
     host: process.env.PGHOST,
-    database: 'weppo_store',
-    password: process.env.PASSWORD,
+    database: process.env.PGDATABASE,
+    password: process.env.PGPASSWORD,
     port: process.env.PGPORT
 };
 
