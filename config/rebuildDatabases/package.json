@@ -1,0 +1,12 @@
+{
+  "name": "rb",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Script which rebuilds all databases",
+  "main": "rb.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "author": "",
+  "license": "MIT"
+}
