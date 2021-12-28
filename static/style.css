@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+
 div.header-element {
     float: left;
 }
@@ -12,4 +14,42 @@ div.menu-element {
 
 main {
     height: 200px;
+}
+
+body {
+    background: #f2f2f2;
+    margin: 0;
+    font-family: "Poppins";
+}
+.navbar-top {
+    background: white;
+    padding: 1em;
+}
+
+.logo {
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+    font-size: 1.5em;
+}
+
+span {
+    color: green;
+}
+
+nav {
+    display: none;
+}
+
+.navbar-top {
+    display: flex;
+    place-content: space-between;
+}
+
+.mobile-menu {
+    cursor: pointer;
+}
+
+.mobile-settings {
+    cursor: pointer;
 }

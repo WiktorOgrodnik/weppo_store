@@ -24,6 +24,19 @@ app.get('/account', (req, res) => {
     res.render('account', {});
 });
 
+//Dodane przezemnie
+app.get('/cart', (req, res) => {
+    res.render('cart', {});
+});
+
+app.get('/contact', (req, res) => {
+    res.render('contact', {});
+});
+
+app.get('/purchase_history', (req, res) => {
+    res.render('purchase_history', {});
+});
+
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });
