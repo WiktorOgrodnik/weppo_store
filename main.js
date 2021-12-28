@@ -6,8 +6,6 @@ import { db, rebuiltDatabase } from './dbconnect.js'
 const app = express();
 const port = process.env.PORT || 3000;
 
-rebuiltDatabase();
-
 app.set('view engine', 'ejs');
 app.set('views', './views');
 

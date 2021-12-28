@@ -1,12 +1,12 @@
 import Client from "pg/lib/client.js";
+const env = process.env.DB_ENVIRONMENT || "development";
 
-export const db = {
-    user: process.env.PGUSER,
-    host: process.env.PGHOST,
-    database: process.env.PGDATABASE,
-    password: process.env.PGPASSWORD,
-    port: process.env.PGPORT
+const db_data = {
+    development: 'postgres://postgres:hfm>J*tAUuVw9:])@localhost:5432/weppo_store',
+    production: process.env.DATABASE_URL
 };
+
+export const db = db_data[env];
 
 /* Code to create tables - don't use it */
 
