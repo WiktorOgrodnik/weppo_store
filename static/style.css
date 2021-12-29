@@ -5,6 +5,7 @@ body {
     background: #f2f2f2;
     margin: 0;
     font-family: "Poppins";
+    padding: 0 1%;
 }
 
 main {
@@ -130,6 +131,7 @@ ul {
     }
 
     .search-box {
+        margin-left: 10px;
         display: flex;
     }
 

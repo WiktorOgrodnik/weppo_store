@@ -130,7 +130,7 @@ function deleteDatabases(i) {
         }
     }
     
-    for(let k of tables) {
+    for (let k of tables) {
         setTimeout(() => del(k).catch(console.error), (i++)*200);
     }
 }
@@ -148,7 +148,7 @@ function createDatabases(i) {
         }
     }
 
-    for(let k of tables) {
+    for (let k of tables) {
         setTimeout(() => make(k).catch(console.error), (i++)*200);
     }
 }
