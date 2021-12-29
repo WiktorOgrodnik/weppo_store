@@ -13,33 +13,74 @@
 </head>
 <body>
     <header>
-        <div id="header-top">
-            <div id="logo" class="header-element">Weppo_Store</div>
-            <div id="search-box" class="header-element">
-                <input type="text">
-                <button>Szukaj</button>
+        <div class="navbar-top">
+
+            <a class="logo" href="/">Weppo<span>Store</span></a>
+
+            <div class='search-box'>
+                <input class="search-text" type="text">
+                <button class="search"><img id="search-but" class="search-button" src="https://img.icons8.com/windows/32/000000/search--v2.png" alt="Search"></button>    
             </div>
-            <div id="header-panel" class="header-element">
-                <div id="header-panel-row1">
-                    Konto
-                    Kontakt
-                </div>
-                <div id="header-panel-row2">
-                    Historia Zakupów
-                    Koszyk
-                </div>
+           
+            <div>
+                <img id="mobile-kategory" class="mobile-kat" src="https://img.icons8.com/material-outlined/24/000000/menu.png" alt="Open Nav">
+                <img id="mobile-set" class="mobile-menu" src="https://img.icons8.com/windows/32/000000/settings--v1.png" alt="Open Set">
             </div>
-            <div class="stop"></div>
+            
+            <nav-primary class="off">
+                <img id="primary-nav-exit" class="mobile-menu-exit" src="https://img.icons8.com/windows/32/000000/delete-sign.png" alt="Close Nav">
+                <ul class="primary-nav">
+                    <li><a href="/contact">Kontakt</a></li>
+                    <li><a href="/account">Konto</a></li>
+                    <li><a href="/purchase_history">Historia Zakupów</a></li>
+                    <li><a href="/cart">Koszyk</a></li>
+                </ul>
+            </nav-primary>
         </div>
-        <div id="header-menu">
-            <div class="menu-element">Kategoria 1</div>
-            <div class="menu-element">Kategoria 2</div>
-            <div class="menu-element">Kategoria 3</div>
-            <div class="menu-element">Kategoria 4</div>
-            <div class="menu-element">Kategoria 5</div>
-            <div class="menu-element">Kategoria 6</div>
-            <div class="menu-element">...</div>
-            <div class="menu-element">Kategoria n</div>
-            <div class="stop"></div>
+        <div class="navbar-bot">
+            <nav-secondary class="off">
+                <img id="secondary-nav-exit" class="mobile-menu-exit" src="https://img.icons8.com/windows/32/000000/delete-sign.png" alt="Close Nav">
+                <ul class="secondary-nav">
+                    <li><a href="/">Kategoria1</a></li>
+                    <li><a href="/">Kategoria2</a></li>
+                    <li><a href="/">Kategoria3</a></li>
+                    <li><a href="/">Kategoria4</a></li>
+                    <li><a href="/">Kategoria5</a></li>
+                    <li><a href="/">Kategoria6</a></li>
+                    <li><a href="/">Kategoria7</a></li>
+                    <li><a href="/">Kategoria8</a></li>
+                    <li><a href="/">Kategoria9</a></li>
+                </ul>
+            </nav>
         </div>
+
+        <script>
+
+            const mobileBtn = document.getElementById('mobile-set');
+            const mobileBtn_Kat = document.getElementById('mobile-kategory');
+
+            const mobileBtn_Exit = document.getElementById('primary-nav-exit');
+            const mobileBtn_Exit_sec = document.getElementById('secondary-nav-exit');
+            
+            const nav_primary = document.querySelector('nav-primary');
+            const nav_secondary = document.querySelector('nav-secondary')
+
+            mobileBtn.addEventListener('click', () => {
+                nav_primary.classList.replace('off','on');
+            });
+
+            mobileBtn_Kat.addEventListener('click', () => {
+                nav_secondary.classList.replace('off','on');
+            })
+
+            mobileBtn_Exit.addEventListener('click', () => {
+                nav_primary.classList.replace('on','off');
+            });
+            
+            mobileBtn_Exit_sec.addEventListener('click', () => {
+                nav_secondary.classList.replace('on','off');
+            })
+
+        </script>
+
     </header>
