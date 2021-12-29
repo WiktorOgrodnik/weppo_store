@@ -24,7 +24,6 @@ app.get('/account', (req, res) => {
     res.render('account', {});
 });
 
-//Dodane przezemnie
 app.get('/cart', (req, res) => {
     res.render('cart', {});
 });
