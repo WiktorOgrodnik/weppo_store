@@ -4,16 +4,20 @@ div.header-element {
     float: left;
 }
 
+/* Cała strona */
 body {
     background: #f2f2f2;
     margin: 0;
     font-family: "Poppins";
 }
+
+/* Ustawienia górnej części strony (header) */
 .navbar-top {
     background: white;
     padding: 1em;
 }
 
+/* ustawienia Loga */
 .logo {
     text-decoration: none;
     font-weight: bold;
@@ -21,12 +25,47 @@ body {
     font-size: 1.5em;
 }
 
+/* Kolor 2 części loga */
 span {
     color: green;
 }
 
-nav {
+
+
+/* Ustawienia - wersja mobilna */
+.on {
+    display: block;
+    position: fixed;
+    z-index: 999;
+    width: 66%;
+    right: 0;
+    top: 0;
+    margin: 0;
+    background: rgb(137, 190, 137);
+    color: white;
+    height: 100vh;
+    padding: 1em;
+}
+
+.off {
     display: none;
+}
+
+ul.primary-nav {
+    margin-top: 5em;
+}
+
+ul.secondary-nav {
+    margin-top: 5em;
+}
+
+
+
+/* żeby nie widziec kategorii */
+
+
+nav.menu-btn {
+    display: block;
 }
 
 .navbar-top {
@@ -34,18 +73,32 @@ nav {
     place-content: space-between;
 }
 
+.mobile-menu-exit {
+    float: right;
+    margin: .5em;
+    cursor: pointer;
+}
+
 .mobile-menu {
     cursor: pointer;
 }
 
-.mobile-settings {
+.mobile-kat {
     cursor: pointer;
 }
 
 a {
-    color: #444444;
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: .5em;
+    font-size: 1.3em;
+    text-align: right;
 }
 
+ul {
+    list-style-type: none;
+}
 
 
 .search-text {
@@ -61,5 +114,6 @@ a {
     border-top-right-radius: 5em;
     border-bottom-right-radius: 5em;
     position: relative;
+    cursor: pointer;
 }
 

@@ -23,23 +23,23 @@
             </div>
            
             <div>
-                <img id="mobile-cta" class="mobile-menu" src="https://img.icons8.com/material-outlined/24/000000/menu.png" alt="Open Nav">
-                <img id="mobile-set" class="mobile-settings" src="https://img.icons8.com/windows/32/000000/settings--v1.png" alt="Open Set">
+                <img id="mobile-kategory" class="mobile-kat" src="https://img.icons8.com/material-outlined/24/000000/menu.png" alt="Open Nav">
+                <img id="mobile-set" class="mobile-menu" src="https://img.icons8.com/windows/32/000000/settings--v1.png" alt="Open Set">
             </div>
             
-            <nav>
+            <nav-primary class="off">
+                <img id="primary-nav-exit" class="mobile-menu-exit" src="https://img.icons8.com/windows/32/000000/delete-sign.png" alt="Close Nav">
                 <ul class="primary-nav">
                     <li><a href="/contact">Kontakt</a></li>
                     <li><a href="/account">Konto</a></li>
                     <li><a href="/purchase_history">Historia Zakupów</a></li>
                     <li><a href="/cart">Koszyk</a></li>
                 </ul>
-            </nav>
-
-            <div class="stop"></div>
+            </nav-primary>
         </div>
         <div class="navbar-bot">
-            <nav>
+            <nav-secondary class="off">
+                <img id="secondary-nav-exit" class="mobile-menu-exit" src="https://img.icons8.com/windows/32/000000/delete-sign.png" alt="Close Nav">
                 <ul class="secondary-nav">
                     <li><a href="/">Kategoria1</a></li>
                     <li><a href="/">Kategoria2</a></li>
@@ -53,4 +53,34 @@
                 </ul>
             </nav>
         </div>
+
+        <script>
+
+            const mobileBtn = document.getElementById('mobile-set');
+            const mobileBtn_Kat = document.getElementById('mobile-kategory');
+
+            const mobileBtn_Exit = document.getElementById('primary-nav-exit');
+            const mobileBtn_Exit_sec = document.getElementById('secondary-nav-exit');
+            
+            const nav_primary = document.querySelector('nav-primary');
+            const nav_secondary = document.querySelector('nav-secondary')
+
+            mobileBtn.addEventListener('click', () => {
+                nav_primary.classList.replace('off','on');
+            });
+
+            mobileBtn_Kat.addEventListener('click', () => {
+                nav_secondary.classList.replace('off','on');
+            })
+
+            mobileBtn_Exit.addEventListener('click', () => {
+                nav_primary.classList.replace('on','off');
+            });
+            
+            mobileBtn_Exit_sec.addEventListener('click', () => {
+                nav_secondary.classList.replace('on','off');
+            })
+
+        </script>
+
     </header>
