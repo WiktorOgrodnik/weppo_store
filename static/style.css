@@ -1,15 +1,185 @@
-div.header-element {
-    float: left;
-}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
 
-div.stop {
-    clear: both;
-}
-
-div.menu-element {
-    float: left;
+/* Cała strona */
+body {
+    background: #f2f2f2;
+    margin: 0;
+    font-family: "Poppins";
 }
 
 main {
-    height: 200px;
+    padding-top: 1em;
+}
+
+/* Ustawienia górnej części strony (header) */
+.navbar-top {
+    display: flex;
+    place-content: space-between;
+    background: white;
+    padding: 1em;
+}
+
+/* ustawienia Loga */
+.logo {
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+    font-size: 1.5em;
+}
+
+/* Kolor 2 części loga */
+span {
+    color: green;
+}
+
+/* Wysuwane paski (kategorie i ustawienia) */
+.on {
+    display: block;
+    position: fixed;
+    z-index: 999;
+    width: 50%;
+    right: 0;
+    top: 0;
+    margin: 0;
+    background: rgb(137, 190, 137);
+    color: white;
+    height: 100vh;
+    padding: 1em;
+}
+
+.off {
+    display: none;
+}
+
+/* Ustawienia w okienkach */
+ul.primary-nav {
+    margin-top: 5em;
+}
+
+ul.secondary-nav {
+    margin-top: 5em;
+}
+
+
+/* Ustawienia przycisków */
+.mobile-menu-exit {
+    float: right;
+    margin: .5em;
+    cursor: pointer;
+}
+
+.mobile-menu {
+    cursor: pointer;
+}
+
+.mobile-kat {
+    cursor: pointer;
+}
+
+/* Ustawienia odnośników do kategorii i ustawień */
+ul a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: .5em;
+    font-size: 1.3em;
+    text-align: right;
+}
+
+/* Brak kropek przy elementach listy */
+ul {
+    list-style-type: none;
+}
+
+/* Ustawienia wyszukiwarki */
+.search-text {
+    border-top-left-radius: 5em;
+    border-bottom-left-radius: 5em;
+    height: 35px;
+    position: relative;
+    top: -10px;
+    right: -2px;
+}
+
+.search {
+    border-top-right-radius: 5em;
+    border-bottom-right-radius: 5em;
+    position: relative;
+    cursor: pointer;
+}
+
+/* Ustawienia w przeglądarce */
+@media only screen and (min-width: 928px) {
+    .mobile-kat, .mobile-menu, .mobile-menu-exit {
+        display: none;
+    }
+
+    header {
+        background: white;
+    }
+
+    .navbar-top, .navbar-bot {
+        width: 928px;
+        margin: 0 auto;
+    }
+
+    .navbar-bot {
+        padding: 1em;
+        position: relative;
+        right: 44px;
+    }
+
+    .search-box {
+        display: flex;
+    }
+
+    .search {
+        height: 50px;
+    }
+
+    .search-text {
+        top: 0px;
+        height: 44px;
+    }
+
+    .navbar-top nav-primary {
+        display: flex;
+        justify-content: space-between;
+        background: none;
+        position: relative;
+        height: auto;
+        width: 100%;
+        padding: 0;
+    }
+
+    .navbar-bot nav-secondary {
+        display: flex;
+        justify-content: space-between;
+        background: none;
+        position: unset;
+        height: auto;
+        width: 100%;
+        padding: 0;
+    }
+    
+    ul {
+        display: flex;
+        place-content: space-between;
+    }
+
+    ul.primary-nav {
+        margin: 0;
+        font-size: 0.9em;
+    }
+
+    ul.secondary-nav {
+        display: flex;
+        place-content: space-between;
+        margin: 0;
+        font-size: 0.7em;
+    }
+
+    ul a {
+        color: black;
+    }
 }
