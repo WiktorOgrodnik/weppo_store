@@ -7,17 +7,14 @@ body {
     font-family: "Poppins";
 }
 
-header {
-    background: white;
+main {
+    padding-top: 1em;
 }
 
 /* Ustawienia górnej części strony (header) */
 .navbar-top {
-    background: white;
-    padding: 1em;
-}
-
-.navbar-bot {
+    display: flex;
+    place-content: space-between;
     background: white;
     padding: 1em;
 }
@@ -35,9 +32,7 @@ span {
     color: green;
 }
 
-
-
-/* Ustawienia - wersja mobilna */
+/* Wysuwane paski (kategorie i ustawienia) */
 .on {
     display: block;
     position: fixed;
@@ -56,6 +51,7 @@ span {
     display: none;
 }
 
+/* Ustawienia w okienkach */
 ul.primary-nav {
     margin-top: 5em;
 }
@@ -65,19 +61,7 @@ ul.secondary-nav {
 }
 
 
-
-/* żeby nie widziec kategorii */
-
-
-nav.menu-btn {
-    display: block;
-}
-
-.navbar-top {
-    display: flex;
-    place-content: space-between;
-}
-
+/* Ustawienia przycisków */
 .mobile-menu-exit {
     float: right;
     margin: .5em;
@@ -92,7 +76,8 @@ nav.menu-btn {
     cursor: pointer;
 }
 
-a {
+/* Ustawienia odnośników do kategorii i ustawień */
+ul a {
     color: white;
     text-decoration: none;
     display: block;
@@ -101,11 +86,12 @@ a {
     text-align: right;
 }
 
+/* Brak kropek przy elementach listy */
 ul {
     list-style-type: none;
 }
 
-
+/* Ustawienia wyszukiwarki */
 .search-text {
     border-top-left-radius: 5em;
     border-bottom-left-radius: 5em;
@@ -122,9 +108,14 @@ ul {
     cursor: pointer;
 }
 
+/* Ustawienia w przeglądarce */
 @media only screen and (min-width: 928px) {
     .mobile-kat, .mobile-menu, .mobile-menu-exit {
         display: none;
+    }
+
+    header {
+        background: white;
     }
 
     .navbar-top, .navbar-bot {
@@ -133,8 +124,9 @@ ul {
     }
 
     .navbar-bot {
+        padding: 1em;
         position: relative;
-        right: 33px;
+        right: 44px;
     }
 
     .search-box {
@@ -187,7 +179,7 @@ ul {
         font-size: 0.7em;
     }
 
-    a {
+    ul a {
         color: black;
     }
 }
