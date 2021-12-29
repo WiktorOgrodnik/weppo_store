@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
 
-div.header-element {
-    float: left;
-}
-
 /* Cała strona */
 body {
     background: #f2f2f2;
@@ -11,8 +7,17 @@ body {
     font-family: "Poppins";
 }
 
+header {
+    background: white;
+}
+
 /* Ustawienia górnej części strony (header) */
 .navbar-top {
+    background: white;
+    padding: 1em;
+}
+
+.navbar-bot {
     background: white;
     padding: 1em;
 }
@@ -37,7 +42,7 @@ span {
     display: block;
     position: fixed;
     z-index: 999;
-    width: 66%;
+    width: 50%;
     right: 0;
     top: 0;
     margin: 0;
@@ -117,3 +122,72 @@ ul {
     cursor: pointer;
 }
 
+@media only screen and (min-width: 928px) {
+    .mobile-kat, .mobile-menu, .mobile-menu-exit {
+        display: none;
+    }
+
+    .navbar-top, .navbar-bot {
+        width: 928px;
+        margin: 0 auto;
+    }
+
+    .navbar-bot {
+        position: relative;
+        right: 33px;
+    }
+
+    .search-box {
+        display: flex;
+    }
+
+    .search {
+        height: 50px;
+    }
+
+    .search-text {
+        top: 0px;
+        height: 44px;
+    }
+
+    .navbar-top nav-primary {
+        display: flex;
+        justify-content: space-between;
+        background: none;
+        position: relative;
+        height: auto;
+        width: 100%;
+        padding: 0;
+    }
+
+    .navbar-bot nav-secondary {
+        display: flex;
+        justify-content: space-between;
+        background: none;
+        position: unset;
+        height: auto;
+        width: 100%;
+        padding: 0;
+    }
+    
+    ul {
+        display: flex;
+        place-content: space-between;
+    }
+
+    ul.primary-nav {
+        margin: 0;
+        font-size: 0.9em;
+    }
+
+    ul.secondary-nav {
+        display: flex;
+        place-content: space-between;
+        margin: 0;
+        font-size: 0.7em;
+    }
+
+    a {
+        color: black;
+    }
+}
