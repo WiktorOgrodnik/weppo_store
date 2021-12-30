@@ -28,6 +28,15 @@ footer {
 
 /* ustawienia Loga */
 .logo {
+    /* display: none; */
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+    font-size: 1.5em;
+}
+
+.logo-mob {
+    display: none;
     text-decoration: none;
     font-weight: bold;
     color: black;
@@ -196,4 +205,15 @@ ul {
     .search-text {
         width: 80px;
     }
+}
+
+@media only screen and (max-width: 385px) {
+    .logo {
+        display: none;
+    }
+
+    .logo-mob {
+        display: block;
+    }
+
 }
