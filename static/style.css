@@ -5,11 +5,17 @@ body {
     background: #f2f2f2;
     margin: 0;
     font-family: "Poppins";
-    padding: 0 1%;
 }
 
 main {
     padding-top: 1em;
+    padding-left: 1%;
+    padding-left: 1%;
+}
+
+footer {
+    padding-left: 1%;
+    padding-right: 1%;
 }
 
 /* Ustawienia górnej części strony (header) */
@@ -183,5 +189,11 @@ ul {
 
     ul a {
         color: black;
+    }
+}
+
+@media only screen and (max-width: 473px) {
+    .search-text {
+        width: 80px;
     }
 }
