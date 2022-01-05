@@ -16,8 +16,14 @@ main {
 login {
     background-color: white;
     display: grid;
-    place-content: center;
+    place-content: left;
+    height: auto;
     border-radius: 1em;
+    padding: 1em;
+    padding-left: 3em;
+    padding-right: 3em;
+    margin-left: 1em;
+    margin-right: 1em;
 }
 
 /* login-title {
@@ -27,8 +33,21 @@ login {
 rejestracja {
     background-color: white;
     display: grid;
-    place-content: center;
+    place-content: left;
     border-radius: 1em;
+    padding: 1em;
+    padding-left: 3em;
+    padding-right: 3em;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+box-name {
+    color: darkgrey;
+}
+
+.account-title {
+    font-size: larger;
 }
 
 .login-btn {
@@ -36,6 +55,8 @@ rejestracja {
     border-radius: 5em;
     color: white;
     font-weight: bold;
+    margin-top: .5em;
+    padding: .8em;
 }
 
 .register-btn {
@@ -43,10 +64,16 @@ rejestracja {
     border-radius: 5em;
     color: white;
     font-weight: bold;
+    margin-top: .5em;
+    padding: 0.8em;
 }
 
 .input {
+    width: auto;
     border-radius: 5em;
+    padding: 0.5em;
+    
+    margin-bottom: 0.5em;
 }
 
 .space {
