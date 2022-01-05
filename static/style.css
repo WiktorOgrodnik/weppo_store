@@ -12,6 +12,47 @@ main {
     padding-top: 1em;
 }
 
+/* Strona logowania - wersja mobilna */
+login {
+    background-color: white;
+    display: grid;
+    place-content: center;
+    border-radius: 1em;
+}
+
+/* login-title {
+    background-color: green;
+} */
+
+rejestracja {
+    background-color: white;
+    display: grid;
+    place-content: center;
+    border-radius: 1em;
+}
+
+.login-btn {
+    background-color: green;
+    border-radius: 5em;
+    color: white;
+    font-weight: bold;
+}
+
+.register-btn {
+    background-color: green;
+    border-radius: 5em;
+    color: white;
+    font-weight: bold;
+}
+
+.input {
+    border-radius: 5em;
+}
+
+.space {
+    margin: 1em;
+}
+
 /* Ustawienia górnej części strony (header) */
 .navbar-top {
     display: flex;
