@@ -36,6 +36,10 @@ app.get('/purchase_history', (req, res) => {
     res.render('purchase_history', {});
 });
 
+app.get('/produkt1', (req, res) => {
+    res.render('produkt1', {});
+});
+
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);
 });

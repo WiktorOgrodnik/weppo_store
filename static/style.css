@@ -26,10 +26,6 @@ login {
     margin-bottom: 1em;
 }
 
-/* login-title {
-    background-color: green;
-} */
-
 rejestracja {
     background-color: white;
     display: grid;
@@ -175,6 +171,47 @@ ul {
     position: relative;
     cursor: pointer;
 }
+
+/* Strona produktu */
+
+product {
+    display: grid;
+}
+
+.product-img {
+    place-self: center;
+}
+
+description {
+    display: grid;
+    margin: .5em;
+    padding: .5em;
+    background-color: white;
+    border-radius: 1em;
+    border: solid;
+    border-color: darkgrey;
+}
+
+product-title {
+    font-size: x-large;
+    margin-bottom: .5em;
+}
+
+opis-title {
+    font-size: x-large;
+}
+
+.add-to-cart {
+    place-self: center;
+    background-color: green;
+    color: white;
+    border-radius: 5em;
+    width: 80%;
+    padding: .5em;
+    margin: 1em;
+}
+
+
 
 /* Ustawienia w przeglądarce */
 @media only screen and (min-width: 928px) {
