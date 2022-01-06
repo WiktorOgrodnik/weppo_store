@@ -17,11 +17,13 @@ const tables = [
     'deliveries',
     'payment_methods',
     'statuses',
+    'categories',
     'personal_data',
     'users',
     'orders',
     'products_orders',
-    'users_roles'
+    'users_roles',
+    'categories_products'
 ];
 
 const createTableQueries = {
@@ -171,27 +173,48 @@ export function rebuiltDatabase() {
     createDatabases(tables.length);
 }
 
-/* Insert data functions */
+/* Manipulating data */
 
-const addQuery = {
-    products: `INSERT INTO products VALUES (DEFAULT, $1, $2, $3, $4, $5, $6);`
-}
-
-function addQueryBuilder(query) {
+function queryBuilder(query) {
     return async function (req) {
         const client = new Client(db);
 
         await client.connect();
         try {
-            await client.query(query, req);
+            return client.query(query, req);
         } catch (err) {
             console.error('Something unexpected happened: ' + err.stack);
-        } finally {
-            client.end();
         }
     }
 }
 
+/* Insert data functions */
+
+const addQuery = {
+    products: 'INSERT INTO products VALUES (DEFAULT, $1, $2, $3, $4, $5, $6);',
+    categories: 'INSERT INTO categories VALUES (DEFAULT, $1);'
+}
+
 export function add(table) {
-    return addQueryBuilder(addQuery[table]);
+    return queryBuilder(addQuery[table]);
+}
+
+/* Getting data */
+
+const getQuery = {
+    products: 'SELECT * FROM products;',
+    categories: 'SELECT * FROM categories;'
+}
+
+const getQueryWithCondition = {
+    products: 'SELECT * FROM products WHERE product_id=$1;',
+    categories: 'SELECT * FROM categories WHERE category_id=$1;'
+}
+
+export function get(table) {
+    return queryBuilder(getQuery[table]);
+}
+
+export function getWithCondition(table) {
+    return queryBuilder(getQueryWithCondition[table]);
 }
