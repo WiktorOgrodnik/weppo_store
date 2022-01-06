@@ -2,7 +2,7 @@ import Client from "pg/lib/client.js";
 const env = process.env.DB_ENVIRONMENT || "development";
 
 const db_data = {
-    development: 'postgres://postgres:hfm>J*tAUuVw9:])@localhost:5432/weppo_store',
+    development: 'postgres://postgres:password@localhost:5432/weppo_store',
     production: process.env.DATABASE_URL
 };
 
@@ -56,6 +56,10 @@ const createTableQueries = {
     );`,
     statuses: `statuses (
         status_id SERIAL PRIMARY KEY,
+        name VARCHAR(50) NOT NULL
+    );`,
+    categories: `categories (
+        category_id SERIAL PRIMARY KEY,
         name VARCHAR(50) NOT NULL
     );`,
     personal_data: `personal_data (
@@ -114,10 +118,19 @@ const createTableQueries = {
         PRIMARY KEY (product_id, order_id),
         FOREIGN KEY (product_id) REFERENCES products (product_id),
         FOREIGN KEY (order_id) REFERENCES orders (order_id)
+    );`,
+    categories_products: `categories_products (
+        product_id INT NOT NULL,
+        category_id INT NOT NULL,
+        PRIMARY KEY (product_id, category_id),
+        FOREIGN KEY (product_id) REFERENCES products (product_id),
+        FOREIGN KEY (category_id) REFERENCES categories (category_id) 
     );`
 };
 
-function deleteDatabases(i) {
+function deleteDatabases() {
+
+    let i = 0;
 
     const del = async (k) => {
         const client = new Client(db);
@@ -154,6 +167,31 @@ function createDatabases(i) {
 }
 
 export function rebuiltDatabase() {
-    deleteDatabases(0);
+    deleteDatabases();
     createDatabases(tables.length);
+}
+
+/* Insert data functions */
+
+const addQuery = {
+    products: `INSERT INTO products VALUES (DEFAULT, $1, $2, $3, $4, $5, $6);`
+}
+
+function addQueryBuilder(query) {
+    return async function (req) {
+        const client = new Client(db);
+
+        await client.connect();
+        try {
+            await client.query(query, req);
+        } catch (err) {
+            console.error('Something unexpected happened: ' + err.stack);
+        } finally {
+            client.end();
+        }
+    }
+}
+
+export function add(table) {
+    return addQueryBuilder(addQuery[table]);
 }
