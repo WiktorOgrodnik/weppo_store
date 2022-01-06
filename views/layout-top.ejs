@@ -42,8 +42,8 @@
             <nav-secondary class="off">
                 <img id="secondary-nav-exit" class="mobile-menu-exit" src="https://img.icons8.com/windows/32/000000/delete-sign.png" alt="Close Nav">
                 <ul class="secondary-nav">
-                    <% for (let k of locals.categories) { %>
-                        <li><a href="/"><%= k.name %></a></li>
+                    <% for (let i = 0; i < locals.categories.length; i++) { %>
+                        <li><a href="/category/<%=i+1 %>"><%= locals.categories[i].name %></a></li>
                     <% } %> 
                 </ul>
             </nav>

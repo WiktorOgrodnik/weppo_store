@@ -8,7 +8,8 @@ const read = readline.createInterface({
 
 const insert_builder = {
     products: ['Product', 'name', 'price', 'discounted_price', 'ammount', 'description', 'image'],
-    categories: ['Category', 'name']
+    categories: ['Category', 'name'],
+    categories_products: ['Categories_products', 'product_id', 'category_id']
 };
 
 const questionBuilder = function (name, arr, length, callback) {
