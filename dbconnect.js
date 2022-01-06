@@ -1,4 +1,4 @@
-import Client from "pg/lib/client.js";
+import Pool from 'pg/lib/client.js';
 const env = process.env.DB_ENVIRONMENT || "development";
 
 const db_data = {
@@ -153,7 +153,7 @@ function deleteDatabases() {
 function createDatabases(i) {
 
     const make = async (k) => {
-        const client = new Client(db);
+        const client = new Pool(db);
 
         await client.connect();
         try {
@@ -177,7 +177,7 @@ export function rebuiltDatabase() {
 
 function queryBuilder(query) {
     return async function (req) {
-        const client = new Client(db);
+        const client = new Pool(db);
 
         await client.connect();
         try {
@@ -185,6 +185,8 @@ function queryBuilder(query) {
         } catch (err) {
             console.error('Something unexpected happened: ' + err.stack);
         }
+
+        await client.end();
     }
 }
 
