@@ -1,7 +1,7 @@
 'use strict';
 
 import express from 'express';
-import { db, rebuiltDatabase } from './dbconnect.js'
+import { get, getWithCondition } from './dbconnect.js'
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -13,27 +13,54 @@ app.use(express.static('./static'));
 app.use(express.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
-    res.render('index', {});
+    (async () => {
+        const products = await (get('products'))();
+        const categories = await (get('categories'))();
+        res.render('index', {products: products.rows, categories: categories.rows});
+    })();
 });
 
 app.get('/settings', (req, res) => {
-    res.render('settings', {});
+    (async () => {
+        const categories = await (get('categories'))();
+        res.render('settings', {categories: categories.rows});
+    })();
 });
 
 app.get('/account', (req, res) => {
-    res.render('account', {});
+    (async () => {
+        const categories = await (get('categories'))();
+        res.render('account', {categories: categories.rows});
+    })();
 });
 
 app.get('/cart', (req, res) => {
-    res.render('cart', {});
+    (async () => {
+        const categories = await (get('categories'))();
+        res.render('cart', {categories: categories.rows});
+    })();
 });
 
 app.get('/contact', (req, res) => {
-    res.render('contact', {});
+    (async () => {
+        const categories = await (get('categories'))();
+        res.render('contact', {categories: categories.rows});
+    })();
 });
 
 app.get('/purchase_history', (req, res) => {
-    res.render('purchase_history', {});
+    (async () => {
+        const categories = await (get('categories'))();
+        res.render('purchase_history', {categories: categories.rows});
+    })();
+});
+
+app.get('/product/:id', (req, res) => {
+    (async () => {
+        const categories = await (get('categories'))();
+        const products = await (getWithCondition('products'))([req.params.id]);
+        res.render('product', {product: products.rows[0], categories: categories.rows});
+    })();
 });
 
 app.listen(port, () => {

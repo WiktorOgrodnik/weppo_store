@@ -18,6 +18,69 @@ footer {
     padding-right: 1%;
 }
 
+/* Strona logowania - wersja mobilna */
+login {
+    background-color: white;
+    display: grid;
+    height: auto;
+    border-radius: 1em;
+    padding: 1em;
+    padding-left: 3em;
+    padding-right: 3em;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 1em;
+}
+
+rejestracja {
+    background-color: white;
+    display: grid;
+    border-radius: 1em;
+    padding: 1em;
+    padding-left: 3em;
+    padding-right: 3em;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 1em;
+}
+
+box-name {
+    color: darkgrey;
+}
+
+.account-title {
+    font-size: larger;
+}
+
+.login-btn {
+    background-color: green;
+    border-radius: 5em;
+    color: white;
+    font-weight: bold;
+    margin-top: .5em;
+    padding: .8em;
+}
+
+.register-btn {
+    background-color: green;
+    border-radius: 5em;
+    color: white;
+    font-weight: bold;
+    margin-top: .5em;
+    padding: 0.8em;
+}
+
+.input {
+    width: auto;
+    border-radius: 5em;
+    padding: 0.5em;
+}
+
+box-name {
+    margin-top: 0.5em;
+}
+
+
 /* Ustawienia górnej części strony (header) */
 .navbar-top {
     display: flex;
@@ -124,6 +187,47 @@ ul {
     cursor: pointer;
 }
 
+/* Strona produktu */
+
+product {
+    display: grid;
+}
+
+.product-img {
+    place-self: center;
+}
+
+description {
+    display: grid;
+    margin: .5em;
+    padding: .5em;
+    background-color: white;
+    border-radius: 1em;
+    border: solid;
+    border-color: darkgrey;
+}
+
+product-title {
+    font-size: x-large;
+    margin-bottom: .5em;
+}
+
+opis-title {
+    font-size: x-large;
+}
+
+.add-to-cart {
+    place-self: center;
+    background-color: green;
+    color: white;
+    border-radius: 5em;
+    width: 80%;
+    padding: .5em;
+    margin: 1em;
+}
+
+
+
 /* Ustawienia w przeglądarce */
 @media only screen and (min-width: 928px) {
     .mobile-kat, .mobile-menu, .mobile-menu-exit {
@@ -198,6 +302,28 @@ ul {
 
     ul a {
         color: black;
+    }
+
+    main {
+        display: flex;
+        place-content: space-evenly;
+    }
+
+    login {
+        height: fit-content;
+        width: 25%;
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+    rejestracja {
+        width: 25%;
+        margin-right: 0;
+        margin-left: 0;
+    }
+    
+    box-name {
+        place-self: end left;
     }
 }
 
