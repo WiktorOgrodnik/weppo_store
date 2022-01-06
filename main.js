@@ -63,6 +63,14 @@ app.get('/product/:id', (req, res) => {
     })();
 });
 
+app.get('/category/:id', (req, res) => {
+    (async () => {
+        const categories = await (get('categories'))();
+        const products = await (getWithCondition('categories_products'))([req.params.id]);
+        res.render('category', {products: products.rows, categories: categories.rows});
+    })();
+});
+
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+    console.log(`Weppo-store listening at port ${port}`);
 });

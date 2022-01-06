@@ -192,7 +192,8 @@ function queryBuilder(query) {
 
 const addQuery = {
     products: 'INSERT INTO products VALUES (DEFAULT, $1, $2, $3, $4, $5, $6);',
-    categories: 'INSERT INTO categories VALUES (DEFAULT, $1);'
+    categories: 'INSERT INTO categories VALUES (DEFAULT, $1);',
+    categories_products: 'INSERT INTO categories_products VALUES ($1, $2);'
 }
 
 export function add(table) {
@@ -203,12 +204,14 @@ export function add(table) {
 
 const getQuery = {
     products: 'SELECT * FROM products;',
-    categories: 'SELECT * FROM categories;'
+    categories: 'SELECT * FROM categories;',
+    categories_products: 'SELECT * FROM categories_products;'
 }
 
 const getQueryWithCondition = {
     products: 'SELECT * FROM products WHERE product_id=$1;',
-    categories: 'SELECT * FROM categories WHERE category_id=$1;'
+    categories: 'SELECT * FROM categories WHERE category_id=$1;',
+    categories_products: 'SELECT * FROM (SELECT * FROM products LEFT JOIN categories_products ON products.product_id = categories_products.product_id) temp WHERE temp.category_id=$1;'
 }
 
 export function get(table) {
