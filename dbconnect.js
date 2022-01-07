@@ -3,6 +3,7 @@ const env = process.env.DB_ENVIRONMENT || "development";
 
 const db_data = {
     development: 'postgres://postgres:password@localhost:5432/weppo_store',
+    // development: 'postgres://postgres:142327@localhost:5432/weppo_store',
     production: process.env.DATABASE_URL
 };
 
@@ -135,7 +136,7 @@ function deleteDatabases() {
     let i = 0;
 
     const del = async (k) => {
-        const client = new Client(db);
+        const client = new Pool(db);
 
         await client.connect();
         try {
@@ -177,16 +178,19 @@ export function rebuiltDatabase() {
 
 function queryBuilder(query) {
     return async function (req) {
-        const client = new Pool(db);
+        const client = new Pool({connectionString: db, idleTimeoutMillis: 100});
+        let toReturn = {};
 
         await client.connect();
         try {
-            return client.query(query, req);
+            toReturn = await client.query(query, req);
         } catch (err) {
             console.error('Something unexpected happened: ' + err.stack);
+        } finally {
+            client.end();
         }
 
-        await client.end();
+        return toReturn;
     }
 }
 

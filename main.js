@@ -25,7 +25,7 @@ app.get('/settings', (req, res) => {
         const categories = await (get('categories'))();
         res.render('settings', {categories: categories.rows});
     })();
-});
+}); 
 
 app.get('/account', (req, res) => {
     (async () => {
