@@ -12,6 +12,15 @@ app.set('views', './views');
 app.use(express.static('./static'));
 app.use(express.urlencoded({extended: true}));
 
+app.get('/api/mainpage', (req, res) => {
+    (async () => {
+        const products = await (get('products'))();
+
+        res.setHeader('Content-type', 'application/json; charset=utf8;');
+        res.end(JSON.stringify(products.rows))
+    })();
+});
+
 app.get('/', (req, res) => {
     (async () => {
         const products = await (get('products'))();
