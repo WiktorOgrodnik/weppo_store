@@ -5,11 +5,17 @@ body {
     background: #f2f2f2;
     margin: 0;
     font-family: "Poppins";
-    padding: 0 1%;
 }
 
 main {
     padding-top: 1em;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+footer {
+    padding-left: 1%;
+    padding-right: 1%;
 }
 
 /* Strona logowania - wersja mobilna */
@@ -91,6 +97,14 @@ box-name {
     font-size: 1.5em;
 }
 
+.logo-mob {
+    display: none;
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+    font-size: 1.5em;
+}
+
 /* Kolor 2 części loga */
 span {
     color: green;
@@ -124,7 +138,6 @@ ul.secondary-nav {
     margin-top: 5em;
 }
 
-
 /* Ustawienia przycisków */
 .mobile-menu-exit {
     float: right;
@@ -146,7 +159,7 @@ ul a {
     text-decoration: none;
     display: block;
     padding: .5em;
-    font-size: 1.3em;
+    font-size: 1.2em;
     text-align: right;
 }
 
@@ -211,7 +224,22 @@ opis-title {
     margin: 1em;
 }
 
+/* Strona główna + strona kategorii */
 
+h3 {
+    margin: 0;
+}
+
+category a {
+    color: rgb(5, 104, 63);
+    text-decoration: none;
+    display: inline-block;
+    padding: .5em;
+    font-size: 1.2em;
+    text-align: left;
+    margin: 0;
+    padding: .3em;
+}
 
 /* Ustawienia w przeglądarce */
 @media only screen and (min-width: 928px) {
@@ -223,8 +251,8 @@ opis-title {
         background: white;
     }
 
-    .navbar-top, .navbar-bot {
-        width: 928px;
+    .navbar-top {
+        width: 866px;
         margin: 0 auto;
     }
 
@@ -232,6 +260,8 @@ opis-title {
         padding: 1em;
         position: relative;
         right: 44px;
+        width: fit-content;
+        margin: 0 auto;
     }
 
     .search-box {
@@ -282,11 +312,12 @@ opis-title {
         display: flex;
         place-content: space-between;
         margin: 0;
-        font-size: 0.7em;
+        font-size: 0.8em;
     }
 
     ul a {
         color: black;
+        text-align: center;
     }
 
     main {
@@ -309,5 +340,25 @@ opis-title {
     
     box-name {
         place-self: end left;
+    }
+}
+
+@media only screen and (max-width: 473px) {
+    .search-text {
+        width: 80px;
+    }
+}
+
+@media only screen and (max-width: 385px) {
+    .logo {
+        display: none;
+    }
+
+    .logo-mob {
+        display: block;
+    }
+
+    ul a {
+        font-size: 0.8em;
     }
 }
