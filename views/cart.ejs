@@ -1,10 +1,13 @@
 <%- include('layout-top', {}) %>
 <main>
-    To jest koszyk.<br><br>
-
-    Linki:<br>
-    <a href="/">Strona główna</a><br>
-    <a href="/settings">Ustawienia</a><br>
-    <a href="/account">Konto</a><br>
+    <% if (locals.cart.length == 0) { %>
+        <span>Twój koszyk jest pusty.</span>
+    <% } %>
+    <% if (locals.cart.length) { %>
+        <span>Twój koszyk: </span>
+        <% for (let i of locals.cart) { %>
+            <span><a href="/product/<%= i.product_id %>"><%= i.name %></a>: <%= i.ammount %></span>
+        <% } %>
+    <% } %>
 </main>
 <%- include('layout-bottom', {}) %>

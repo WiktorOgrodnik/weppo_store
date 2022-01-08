@@ -1,9 +1,30 @@
 <%- include('layout-top', {static_correction: './../'}) %>
 <main>
+    <script>
+
+        window.addEventListener('load', (event) => {
+            const button = document.getElementById('add-to-cart');
+            
+            button.addEventListener('click', (event) => {
+                (async () => {
+
+                    const id = document.getElementById('product-id').innerHTML;
+
+                    const response = await fetch(`/api/addToCart/${id}/1`, {
+                        method: 'POST'
+                    });
+
+                    console.log(response.ok);
+                })();
+            });
+        });
+
+    </script>
+
     <product>
         <img class="product-img" src="./../img/<%= locals.product.image %>" alt="" width="300" height="300">
 
-        <button class="add-to-cart">Dodaj do koszyka</button>
+        <button class="add-to-cart" id="add-to-cart">Dodaj do koszyka</button>
 
         <description>
             <product-title><%= locals.product.name %></product-title>
@@ -14,6 +35,8 @@
             Cena po obniżce (w groszach): <%= locals.product.disconted_price %> <br>
             Pozostało sztuk: <%= locals.product.ammount %> <br>
         </description>
+
+        <div id="product-id" style="display: hidden;"><%= locals.product.product_id %></div>
     </product>  
 </main>
 <%- include('layout-bottom', {}) %>

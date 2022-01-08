@@ -88,16 +88,16 @@ const createTableQueries = {
     );`,
     orders: `orders (
         order_id BIGSERIAL PRIMARY KEY,
-        user_id INT NOT NULL,
-        perdata_id INT NOT NULL,
+        user_id INT,
+        perdata_id INT,
         other_adress_id INT,
-        order_date TIMESTAMP NOT NULL,
+        order_date TIMESTAMP,
         end_date TIMESTAMP,
-        delivery_id INT NOT NULL,
-        payment_id INT NOT NULL,
+        delivery_id INT,
+        payment_id INT,
         is_paid BIT(1) NOT NULL,
         status_id INT NOT NULL,
-        price INT NOT NULL,
+        price INT,
         FOREIGN KEY (user_id) REFERENCES users (user_id),
         FOREIGN KEY (perdata_id) REFERENCES personal_data (perdata_id),
         FOREIGN KEY (other_adress_id) REFERENCES addresses (adress_id),
@@ -127,7 +127,7 @@ const createTableQueries = {
         category_id INT NOT NULL,
         PRIMARY KEY (product_id, category_id),
         FOREIGN KEY (product_id) REFERENCES products (product_id),
-        FOREIGN KEY (category_id) REFERENCES categories (category_id) 
+        FOREIGN KEY (category_id) REFERENCES categories (category_id)
     );`
 };
 
@@ -199,7 +199,10 @@ function queryBuilder(query) {
 const addQuery = {
     products: 'INSERT INTO products VALUES (DEFAULT, $1, $2, $3, $4, $5, $6);',
     categories: 'INSERT INTO categories VALUES (DEFAULT, $1);',
-    categories_products: 'INSERT INTO categories_products VALUES ($1, $2);'
+    categories_products: 'INSERT INTO categories_products VALUES ($1, $2);',
+    orders: 'INSERT INTO orders VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING order_id;',
+    statuses: 'INSERT INTO statuses VALUES (DEFAULT, $1);',
+    products_orders: 'INSERT INTO products_orders VALUES ($1, $2, $3, $4);'
 }
 
 export function add(table) {
@@ -211,13 +214,17 @@ export function add(table) {
 const getQuery = {
     products: 'SELECT * FROM products;',
     categories: 'SELECT * FROM categories;',
-    categories_products: 'SELECT * FROM categories_products;'
+    categories_products: 'SELECT * FROM categories_products;',
+    orders: 'SELECT * FROM orders;'
 }
 
 const getQueryWithCondition = {
     products: 'SELECT * FROM products WHERE product_id=$1;',
     categories: 'SELECT * FROM categories WHERE category_id=$1;',
-    categories_products: 'SELECT * FROM (SELECT * FROM products LEFT JOIN categories_products ON products.product_id = categories_products.product_id) temp WHERE temp.category_id=$1;'
+    categories_products: 'SELECT * FROM (SELECT * FROM products LEFT JOIN categories_products ON products.product_id = categories_products.product_id) temp WHERE temp.category_id=$1;',
+    orders: 'SELECT * FROM orders WHERE order_id=$1;',
+    products_orders: 'SELECT * FROM products_orders WHERE order_id=$1',
+    products_orders2: 'SELECT products_orders.product_id, products_orders.order_id, products_orders.ammount, products_orders.price, products.name FROM products_orders INNER JOIN products ON products_orders.product_id = products.product_id WHERE products_orders.order_id=$1;'
 }
 
 export function get(table) {
@@ -226,4 +233,17 @@ export function get(table) {
 
 export function getWithCondition(table) {
     return queryBuilder(getQueryWithCondition[table]);
+}
+
+/* Updating data */
+
+const updateQuery = {
+    products_orders: `UPDATE products_orders
+    SET ammount=$3,
+        price=$4
+    WHERE order_id=$1 AND product_id=$2;`
+}
+
+export function update(table) {
+    return queryBuilder(updateQuery[table]);
 }
