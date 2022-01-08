@@ -1,5 +1,5 @@
 <%- include('layout-top', {static_correction: './', categories: locals.categories}) %>
-<main>
+<main class='main-list'>
     <script>
         window.addEventListener('load', (event) => {
             (async () => {
@@ -15,9 +15,12 @@
         });
     </script>
 
-    <h3>Wszystkie produkty:</h3>
-    <category id="main-div" class="ul-category">
-    </category>
+    <div class='item-list'>
+        <h3>Wszystkie produkty:</h3>
+        
+        <category id="main-div" class="ul-category">
+        </category>    
+    </div>
    
 </main>
 <%- include('layout-bottom', {}) %>

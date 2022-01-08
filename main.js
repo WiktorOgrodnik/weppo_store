@@ -56,7 +56,7 @@ app.post('/api/addToCart/:id/:ammount', (req, res) => {
             }
 
             if (exists) {
-                (update('products_orders'))([order_id, product_id, products_orders_ammount + 1, products_orders_price]);
+                (update('products_orders'))([order_id, product_id, +products_orders_ammount + +ammount, products_orders_price]);
             } else {
                 (add('products_orders'))([product_id, order_id, ammount, product_price]);
             }

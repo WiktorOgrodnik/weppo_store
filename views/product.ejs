@@ -1,5 +1,5 @@
 <%- include('layout-top', {static_correction: './../'}) %>
-<main>
+<main class='main-prod'>
     <script>
 
         window.addEventListener('load', (event) => {
@@ -9,11 +9,14 @@
                 (async () => {
 
                     const id = document.getElementById('product-id').innerHTML;
+                    const select = document.getElementById('ammount');
+                    const value = select.options[select.selectedIndex].text;
 
-                    const response = await fetch(`/api/addToCart/${id}/1`, {
+                    const response = await fetch(`/api/addToCart/${id}/${value}`, {
                         method: 'POST'
                     });
 
+                    console.log(value);
                     console.log(response.ok);
                 })();
             });
@@ -22,21 +25,40 @@
     </script>
 
     <product>
-        <img class="product-img" src="./../img/<%= locals.product.image %>" alt="" width="300" height="300">
+        <img class="product-img" src="./../img/<%= locals.product.image %>" alt="" width="260" height="260">
 
-        <button class="add-to-cart" id="add-to-cart">Dodaj do koszyka</button>
+       
+        <info>
+            <price>Cena: <%= locals.product.price %> gr </price>
+            <ammount>Ilość: <%= locals.product.ammount %></ammount>
+        </info>
+
+        <buy-box>
+            <button class="add-to-cart" id="add-to-cart">Dodaj do koszyka</button>
+            <select name="ilość" id="ammount">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9+</option>
+            </select>
+        </buy-box>
+
 
         <description>
             <product-title><%= locals.product.name %></product-title>
             <opis-title>Opis</opis-title>
             <%= locals.product.description %> <br>
             Inne: <br>
-            Cena (w groszach): <%= locals.product.price %> <br>
             Cena po obniżce (w groszach): <%= locals.product.disconted_price %> <br>
             Pozostało sztuk: <%= locals.product.ammount %> <br>
         </description>
 
-        <div id="product-id" style="display: hidden;"><%= locals.product.product_id %></div>
+        <div id="product-id" style="display: none;"><%= locals.product.product_id %></div>
     </product>  
 </main>
 <%- include('layout-bottom', {}) %>
