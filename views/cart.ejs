@@ -1,13 +1,27 @@
 <%- include('layout-top', {}) %>
-<main>
+<main class='main-cart'>
     <% if (locals.cart.length == 0) { %>
-        <span>Twój koszyk jest pusty.</span>
+        <empty-cart>
+            <title class='empty-cart-title'>Twój koszyk jest pusty</title>
+            <title class='empty-cart-description'>Szukasz inspiracji?</title>
+            <a href="/" class='cart-homepage-btn'>Przejdź do strony głównej</a>
+        </empty-cart>
     <% } %>
     <% if (locals.cart.length) { %>
-        <span>Twój koszyk: </span>
-        <% for (let i of locals.cart) { %>
-            <span><a href="/product/<%= i.product_id %>"><%= i.name %></a>: <%= i.ammount %></span>
-        <% } %>
+        <cart>
+            <title class='cart-title'>Koszyk () :</title>
+            <% for (let i of locals.cart) { %>
+                <item> <img src="./../img/<%= i.image %>" alt="img" width="72" height="60"> <a href="/product/<%= i.product_id %>"><%= i.name %></a> Ilość: <%= i.ammount %> </item>
+            <% } %>
+        </cart>
+        <order>
+            <info class='cart-info'>
+                <title class='order-title'>Łączny koszt:</title>
+                <price>2021 zł</price>
+            </info>
+
+            <button class='order-btn'>Przejdź do dostawy</button>
+        </order>
     <% } %>
 </main>
 <%- include('layout-bottom', {}) %>
