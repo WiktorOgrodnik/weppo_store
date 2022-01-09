@@ -326,6 +326,23 @@ item {
     place-content: start space-between;
 }
 
+.item-info {
+    display: grid;
+    padding: 0;
+    place-items: end;
+}
+
+.item-ammount {
+    padding-left: .5em;
+    padding-right: .5em;
+    border: 1px solid black;
+    border-radius: .7em;
+}
+
+.item-price {
+    font-size: .9em;
+}
+
 .cart-title {
     padding-left: .5em;
     display: grid;

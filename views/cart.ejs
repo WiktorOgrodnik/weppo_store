@@ -11,7 +11,14 @@
         <cart>
             <title class='cart-title'>Koszyk () :</title>
             <% for (let i of locals.cart) { %>
-                <item> <img src="./../img/<%= i.image %>" alt="img" width="72" height="60"> <a href="/product/<%= i.product_id %>"><%= i.name %></a> Ilość: <%= i.ammount %> </item>
+                <item> 
+                    <img src="./../img/<%= i.image %>" alt="img" width="72" height="60"> 
+                    <a href="/product/<%= i.product_id %>"><%= i.name %></a>  
+                    <info class='item-info'>
+                        <amount class='item-ammount'><%= i.ammount %></amount> 
+                        <price class='item-price'><%= i.price %> gr</price>
+                    </info> 
+                </item>
             <% } %>
         </cart>
         <order>
