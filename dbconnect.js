@@ -177,16 +177,14 @@ export function rebuiltDatabase() {
 
 function queryBuilder(query) {
     return async function (req) {
-        const client = new Pool(db);
+        const client = new Pool({connectionString: db, idleTimeoutMillis: 200});
 
         await client.connect();
         try {
             return client.query(query, req);
-        } catch (err) {
-            console.error('Something unexpected happened: ' + err.stack);
+        } finally {
+            await client.end();
         }
-
-        await client.end();
     }
 }
 
