@@ -1,11 +1,18 @@
 <%- include('layout-top', {static_correction: './../', categories: locals.categories}) %>
-<main>
-    <h3>Produkty z kategorii:</h3><br>
-    <ul>
-    <% for (let i of locals.products) {%> 
-        <a href="../product/<%= i.product_id %>"><%= i.name %></a>
-    <% } %>
-    </ul>
-   
+<main class='main-list'>
+
+    <div class="item-list">
+        <h3>Produkty z kategorii:</h3>
+
+        <category class="ul-category">
+            
+        <% for (let i of locals.products) {%> 
+            <a href="../product/<%= i.product_id %>"><%= i.name %></a>
+        <% } %>
+    
+        </category>    
+    </div>
+    
+
 </main>
 <%- include('layout-bottom', {}) %>
