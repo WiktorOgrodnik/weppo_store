@@ -1,11 +1,22 @@
 <%- include('layout-top', {static_correction: './../', categories: locals.categories}) %>
-<main>
-    <h3>Produkty z kategorii:</h3>
-    <category class="ul-category">
-    <% for (let i of locals.products) {%> 
-        <a href="../product/<%= i.product_id %>"><%= i.name %></a>
-    <% } %>
-    </category>
-   
+<main class='main-list'>
+
+    <div class="item-list">
+        <h3>Produkty z kategorii:</h3>
+
+        <all-items>
+            
+        <% for (let i of locals.products) {%> 
+            <prod class="product">
+                <img src="./../img/<%= i.image %>" alt="img" width="231" height="200">
+                <a href="/product/<%= i.product_id %>"><%= i.name %></a>
+                <price><%= i.price/100 %> zł</price>
+            </prod>
+        <% } %>
+    
+        </all-items>    
+    </div>
+    
+
 </main>
 <%- include('layout-bottom', {}) %>

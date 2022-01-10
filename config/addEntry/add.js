@@ -9,7 +9,10 @@ const read = readline.createInterface({
 const insert_builder = {
     products: ['Product', 'name', 'price', 'discounted_price', 'ammount', 'description', 'image'],
     categories: ['Category', 'name'],
-    categories_products: ['Categories_products', 'product_id', 'category_id']
+    categories_products: ['Categories_products', 'product_id', 'category_id'],
+    orders: ['Orders', 'user_id', 'perdata_id', 'other_adress_id', 'order_date', 'end_date', 'delivery_id', 'payment_id', 'is_paid', 'status_id', 'price'],
+    products_orders: ['Products_orders', 'product_id', 'order_id', 'ammount', 'price'],
+    statuses: ['Status', 'name']
 };
 
 const questionBuilder = function (name, arr, length, callback) {
