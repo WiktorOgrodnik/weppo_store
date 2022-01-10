@@ -10,7 +10,7 @@
             <prod class="product">
                 <img src="./../img/<%= i.image %>" alt="img" width="231" height="200">
                 <a href="/product/<%= i.product_id %>"><%= i.name %></a>
-                <price><%= i.price %></price>
+                <price><%= i.price/100 %> zł</price>
             </prod>
         <% } %>
     
