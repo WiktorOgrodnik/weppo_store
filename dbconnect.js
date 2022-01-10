@@ -87,7 +87,7 @@ const createTableQueries = {
         FOREIGN KEY (perdata_def_id) REFERENCES personal_data (perdata_id)
     );`,
     orders: `orders (
-        order_id BIGSERIAL PRIMARY KEY,
+        order_id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
         user_id INT,
         perdata_id INT,
         other_adress_id INT,
@@ -115,7 +115,7 @@ const createTableQueries = {
     );`,
     products_orders: `products_orders (
         product_id INT NOT NULL,
-        order_id INT NOT NULL,
+        order_id uuid NOT NULL,
         ammount INT NOT NULL,
         price INT NOT NULL,
         PRIMARY KEY (product_id, order_id),
@@ -130,24 +130,6 @@ const createTableQueries = {
         FOREIGN KEY (category_id) REFERENCES categories (category_id)
     );`
 };
-
-async function deleteDatabases() {
-    
-    for (let k of tables)
-        await (queryBuilder(`DROP TABLE IF EXISTS ${k} CASCADE`))();
-}
-
-async function createDatabases() {
-
-    for (let k of tables)
-        await (queryBuilder(`CREATE TABLE IF NOT EXISTS ${createTableQueries[k]}`))();
-}
-
-export async function rebuiltDatabase() {
-    
-    await deleteDatabases();
-    await createDatabases();
-}
 
 /* Manipulating data */
 
@@ -168,6 +150,27 @@ function queryBuilder(query) {
 
         return toReturn;
     }
+}
+
+/* Create and drop databases */
+
+async function deleteDatabases() {
+    
+    for (let k of tables)
+        await (queryBuilder(`DROP TABLE IF EXISTS ${k} CASCADE`))();
+}
+
+async function createDatabases() {
+
+    for (let k of tables)
+        await (queryBuilder(`CREATE TABLE IF NOT EXISTS ${createTableQueries[k]}`))();
+}
+
+export async function rebuiltDatabase() {
+    
+    await (queryBuilder('CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'))();
+    await deleteDatabases();
+    await createDatabases();
 }
 
 /* Insert data functions */
@@ -200,7 +203,8 @@ const getQueryWithCondition = {
     categories_products: 'SELECT * FROM (SELECT * FROM products LEFT JOIN categories_products ON products.product_id = categories_products.product_id) temp WHERE temp.category_id=$1;',
     orders: 'SELECT * FROM orders WHERE order_id=$1;',
     products_orders: 'SELECT * FROM products_orders WHERE order_id=$1',
-    products_orders2: 'SELECT products_orders.product_id, products_orders.order_id, products_orders.ammount, products_orders.price, products.name FROM products_orders INNER JOIN products ON products_orders.product_id = products.product_id WHERE products_orders.order_id=$1;'
+    products_orders2: 'SELECT products_orders.product_id, products_orders.order_id, products_orders.ammount, products_orders.price, products.name FROM products_orders INNER JOIN products ON products_orders.product_id = products.product_id WHERE products_orders.order_id=$1;',
+    products_orders3: 'SELECT * FROM products_orders WHERE order_id=$1 AND product_id=$2'
 }
 
 export function get(table) {

@@ -40,27 +40,10 @@ app.post('/api/addToCart/:id/:ammount', (req, res) => {
             res.cookie('cart_id', order_id);
         } else {
             order_id = req.cookies.cart_id;
+            const products_orders = await (getWithCondition('products_orders3'))([order_id, product_id]);
 
-            const products_orders = await (getWithCondition('products_orders'))([order_id]);
-            let products_orders_ammount = 0;
-            let products_orders_price = 0;
-
-            let exists = false;
-            for (let i of products_orders.rows) {
-                if (i.product_id == product_id) {
-                    exists = true;
-                    products_orders_ammount = i.ammount;
-                    products_orders_price = i.price;
-                    break;
-                }
-            }
-
-            if (exists) {
-                (update('products_orders'))([order_id, product_id, +products_orders_ammount + +ammount, products_orders_price]);
-            } else {
-                (add('products_orders'))([product_id, order_id, ammount, product_price]);
-            }
-
+            if (products_orders.rows.length) (update('products_orders'))([order_id, product_id, +products_orders.rows[0].ammount + +ammount, products_orders.rows[0].price]);
+            else (add('products_orders'))([product_id, order_id, ammount, product_price]);
         }
 
         res.setHeader('Content-type', 'text/plain; charset=utf8;');
