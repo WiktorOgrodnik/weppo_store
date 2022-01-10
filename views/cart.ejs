@@ -1,5 +1,30 @@
 <%- include('layout-top', {}) %>
 <main class='main-cart'>
+
+    <script>
+        async function deleteFromCart(id) {
+
+            const ammount = 1;
+            console.log(id);
+
+            const response = await fetch(`/api/deleteFromCart/${id}/${ammount}`, {
+                method: 'DELETE'
+            });
+
+            console.log(response.ok);
+
+            const whatNext = await response.text();
+
+            if (whatNext == 'less') {
+                const counter = document.getElementById(`item-ammount-${id}`);
+                counter.innerHTML = +counter.innerHTML - 1;
+            } else if (whatNext == 'none') {
+                const item = document.getElementById(`item-${id}`);
+                item.remove();
+            }
+        }
+    </script>
+
     <% if (locals.cart.length == 0) { %>
         <empty-cart>
             <title class='empty-cart-title'>Twój koszyk jest pusty</title>
@@ -9,14 +34,15 @@
     <% } %>
     <% if (locals.cart.length) { %>
         <cart>
-            <title class='cart-title'>Koszyk () :</title>
+            <title class='cart-title'>Koszyk (<%= locals.cart_data.order_id %>) :</title>
             <% for (let i of locals.cart) { %>
-                <item> 
+                <item id="item-<%= i.product_id %>"> 
                     <img src="./../img/<%= i.image %>" alt="img" width="72" height="60"> 
                     <a href="/product/<%= i.product_id %>"><%= i.name %></a>  
                     <info class='item-info'>
-                        <amount class='item-ammount'><%= i.ammount %></amount> 
-                        <price class='item-price'><%= i.price %> gr</price>
+                        <amount id="item-ammount-<%= i.product_id %>" class='item-ammount'><%= i.ammount %></amount> 
+                        <price class='item-price'><%= i.price/100 %> zł</price>
+                        <button onclick="deleteFromCart('<%= i.product_id %>')">Delete one</button>
                     </info> 
                 </item>
             <% } %>
@@ -24,7 +50,7 @@
         <order>
             <info class='cart-info'>
                 <title class='order-title'>Łączny koszt:</title>
-                <price>2021 zł</price>
+                <price><%= locals.cart_data.price/100 %> zł</price>
             </info>
 
             <button class='order-btn'>Przejdź do dostawy</button>

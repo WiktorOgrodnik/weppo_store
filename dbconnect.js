@@ -203,7 +203,10 @@ const getQueryWithCondition = {
     categories_products: 'SELECT * FROM (SELECT * FROM products LEFT JOIN categories_products ON products.product_id = categories_products.product_id) temp WHERE temp.category_id=$1;',
     orders: 'SELECT * FROM orders WHERE order_id=$1;',
     products_orders: 'SELECT * FROM products_orders WHERE order_id=$1',
-    products_orders2: 'SELECT products_orders.product_id, products_orders.order_id, products_orders.ammount, products_orders.price, products.name FROM products_orders INNER JOIN products ON products_orders.product_id = products.product_id WHERE products_orders.order_id=$1;',
+    products_orders2: `SELECT products_orders.product_id, products_orders.order_id, products_orders.ammount, products_orders.price, products.name, products.image 
+        FROM products_orders 
+        INNER JOIN products ON products_orders.product_id = products.product_id 
+        WHERE products_orders.order_id=$1;`,
     products_orders3: 'SELECT * FROM products_orders WHERE order_id=$1 AND product_id=$2'
 }
 
@@ -221,9 +224,23 @@ const updateQuery = {
     products_orders: `UPDATE products_orders
     SET ammount=$3,
         price=$4
-    WHERE order_id=$1 AND product_id=$2;`
+    WHERE order_id=$1 AND product_id=$2;`,
+    orders_when_add_to_cart: `UPDATE orders
+    SET price=$2
+    WHERE order_id=$1;`
 }
 
 export function update(table) {
     return queryBuilder(updateQuery[table]);
+}
+
+/* Deleting data */
+
+const deleteQuery = {
+    products_orders: `DELETE FROM products_orders
+    WHERE order_id=$1 AND product_id=$2;`
+}
+
+export function deleted(table) {
+    return queryBuilder(deleteQuery[table]);
 }
