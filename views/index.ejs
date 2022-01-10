@@ -9,7 +9,7 @@
                 const div = document.getElementById('main-div');
                 
                 for (let i of data) {
-                    div.innerHTML += `<a href="/product/${i.product_id}">${i.name}</a>`;
+                    div.innerHTML += `<prod class="product"> <img src="./../img/${i.image}" alt="img" width="231" height="200"> <a href="/product/${i.product_id}">${i.name}</a> <price>${i.price/100} zł</price> </prod>`;
                 }
             })();
         });
@@ -17,9 +17,9 @@
 
     <div class='item-list'>
         <h3>Wszystkie produkty:</h3>
-        
-        <category id="main-div" class="ul-category">
-        </category>    
+    
+        <all-items id="main-div">
+        </all-items>
     </div>
    
 </main>

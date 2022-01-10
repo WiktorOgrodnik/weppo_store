@@ -262,15 +262,44 @@ h3 {
     margin: 0;
 }
 
-category a{
+.item-list {
+    display: grid;
+    place-items: auto;
+}
+
+all-items {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    place-items: center;
+}
+
+all-items a{
     color: rgb(5, 104, 63);
     text-decoration: none;
-    display: inline-block;
     padding: .5em;
     font-size: 1.2em;
-    text-align: left;
     margin: 0;
     padding: .3em;
+}
+
+.product {
+    display: grid;
+    place-items: center center;
+    margin: 1px;
+    padding: .2em;
+    width: fit-content;
+}
+
+.product:hover {
+    border: 1px solid gray;
+    border-radius: 1em;
+    margin: 0;
+}
+
+@media only screen and (max-width: 740px) {
+    all-items {
+        grid-template-columns: 1fr 1fr;
+    }
 }
 
 /* Strona koszyka */
@@ -320,10 +349,12 @@ cart a {
 }
 
 item {
-    margin: .5em;
+    padding: .5em;
     display: flex;
     color: black;
     place-content: start space-between;
+
+    border-top: 1px solid gray;
 }
 
 .item-info {
@@ -346,8 +377,9 @@ item {
 .cart-title {
     padding-left: .5em;
     display: grid;
+    padding-top: .5em;
+    padding-bottom: .5em;
     color: darkgray;
-    border-bottom: 1px solid gray;
     font-size: larger;
 }
 
@@ -385,7 +417,7 @@ order {
 }
 
 /* Ustawienia w przeglądarce */
-@media only screen and (min-width: 928px) {
+@media only screen and (min-width: 968px) {
     .mobile-kat, .mobile-menu, .mobile-menu-exit {
         display: none;
     }
@@ -488,17 +520,65 @@ order {
     box-name {
         place-self: end left;
     }
-}
 
+    /* Ustawienia koszyka */
 
+    .main-cart {
+        margin-top: 1em;
+        place-content: center;
+    }
 
-@media only screen and (max-width: 473px) {
-    .search-text {
-        width: 80px;
+    cart {
+        width: 45%;
+        height: fit-content;
+        margin-right: 1em;
+
+        border: 1px solid gray;
+        border-radius: .5em;
+    }
+
+    order {
+        width: 25%;
+        height: 140px;
+        border: 1px solid gray;
+        border-radius: 1em;
+        padding: 1em;
+    }
+
+    .cart-info {
+        place-items: center center;
+    }
+
+    .order-btn {
+        height: 50px;
+        width: 100%;
+        place-self: center center;
+    }
+
+    /* Ustawienia strony głównej */
+
+    all-items {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .main-list {
+        display: block;
     }
 }
 
-@media only screen and (max-width: 385px) {
+
+
+@media only screen and (max-width: 487px) {
+    .search-text {
+        width: 80px;
+    }
+
+    all-items {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media only screen and (max-width: 405px) {
     .logo {
         display: none;
     }
