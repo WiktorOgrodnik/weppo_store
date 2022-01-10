@@ -1,4 +1,39 @@
-import { rebuiltDatabase } from "../../dbconnect.js";
+import { rebuiltDatabase, add } from "../../dbconnect.js";
 
-rebuiltDatabase();
+const initialData = {
+    
+    statuses: [
+        ['Koszyk']
+    ],
+    categories: [
+        ['Laptopy i Komputery'],
+        ['Smartfony'],
+        ['Podzespoły komputerowe'],
+        ['Urządzenia peryferyjne'],
+        ['RTV'],
+        ['Smarthome'],
+        ['Akcesoria']
+    ],
+    products: [
+        ['ASUS TUF Gaming F15', 489900, 489900, 76, 'Stworzony pod kątem poważnej rozgrywki i zapewnienia wysokiej wytrzymałości w codziennym użytkowaniu laptop TUF Gaming F15 to doskonale wyposażona maszyna gamingowa, która będzie towarzyszyła Ci podczas kolejnych zwycięstw. Dzięki zastosowaniu procesora Intel® Core™ 11. generacji i karty graficznej GeForce® RTX z serii 3000 — nawet najszybsza akcja rozgrywki będzie dynamiczna i płynna.', 'lap1.jpg'],
+        ['Samsung Galaxy S21 FE 5G', 349900, 349900, 1, 'Popatrz jak wygląda nowy Samsung Galaxy S21 FE 128 GB 5G Fan Edition szary, Jego konstrukcja nawiązuje do rodziny S21. Obudowa jest elegancka, a zarazem minimalistyczna. Dzięki temu jest po prostu piękna. W jej konstrukcji znalazło się miejsce na trzy aparaty, które zagwarantują doskonałe ujęcia. Potem możesz je wyświetlić na ekran o wielkości 6,4 cala. Ma on rozdzielczość Full HD+, więc każde treści już stale będą pełne detali i szczegółów. To wszystko dopełnia procesor z ośmioma rdzeniami. Jest to Snapdragon 888. Korzystaj o resztę zadba S21 FE 5G Fan Edition.', 'samsung.jpg'],
+        ['Nokia C20 Dual SIM', 39900, 39900, 23, 'Skandynawski design i jakość wykonania oznaczają, że Nokia C20 niebieski nie tylko świetnie wygląda, ale jest również wytrzymała. Bateria działa przez cały dzień i pozwoli robić Ci to, co lubisz, bez obaw o zapas energii. Duży ekran sprawia, że ​​wszystko wygląda jeszcze lepiej. Smartfon działa na szybkim procesorze z systemem Android 11 oraz łącznością 4G. Dzięki regularnym aktualizacjom Nokia C20 będzie działać płynniej i dłużej.', 'nokia.jpg']
+    ],
+    categories_products: [
+        [1, 1],
+        [2, 2],
+        [3, 2]
+    ]
+};
+
+(async () => {
+    await rebuiltDatabase();
+
+    for (let i in initialData) {
+        const callback = add(i);
+        for (let j of initialData[i]) await callback(j);
+    }
+
+})();
+
 console.log('rebuilding database...');

@@ -131,47 +131,22 @@ const createTableQueries = {
     );`
 };
 
-function deleteDatabases() {
-
-    let i = 0;
-
-    const del = async (k) => {
-        const client = new Pool(db);
-
-        await client.connect();
-        try {
-            await client.query(`DROP TABLE IF EXISTS ${k} CASCADE`);
-        } finally {
-            await client.end();
-        }
-    }
+async function deleteDatabases() {
     
-    for (let k of tables) {
-        setTimeout(() => del(k).catch(console.error), (i++)*200);
-    }
+    for (let k of tables)
+        await (queryBuilder(`DROP TABLE IF EXISTS ${k} CASCADE`))();
 }
 
-function createDatabases(i) {
+async function createDatabases() {
 
-    const make = async (k) => {
-        const client = new Pool(db);
-
-        await client.connect();
-        try {
-            await client.query(`CREATE TABLE IF NOT EXISTS ${createTableQueries[k]}`);
-        } finally {
-            await client.end();
-        }
-    }
-
-    for (let k of tables) {
-        setTimeout(() => make(k).catch(console.error), (i++)*200);
-    }
+    for (let k of tables)
+        await (queryBuilder(`CREATE TABLE IF NOT EXISTS ${createTableQueries[k]}`))();
 }
 
-export function rebuiltDatabase() {
-    deleteDatabases();
-    createDatabases(tables.length);
+export async function rebuiltDatabase() {
+    
+    await deleteDatabases();
+    await createDatabases();
 }
 
 /* Manipulating data */
