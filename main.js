@@ -105,11 +105,12 @@ app.get('/cart', (req, res) => {
 
         if (req.cookies.cart_id) {
             const cart = await (getWithCondition('products_orders2'))([req.cookies.cart_id]);
-            const cart_data = await (getWithCondition('products_orders4'))([req.cookies.cart_id]);
-
             products = cart.rows;
-            cart_value = cart_data.rows ? cart_data.rows[0].price : 0;
-            cart_count = cart_data.rows ? cart_data.rows[0].ammount : 0;
+
+            for (let k of products) {
+                cart_value += k.ammount * k.price;
+                cart_count += k.ammount;
+            }
         }
 
         res.render('cart', {categories: categories.rows, cart: products, cart_value: cart_value, cart_count: cart_count});

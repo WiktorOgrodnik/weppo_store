@@ -207,8 +207,7 @@ const getQueryWithCondition = {
         FROM products_orders 
         INNER JOIN products ON products_orders.product_id = products.product_id 
         WHERE products_orders.order_id=$1;`,
-    products_orders3: 'SELECT * FROM products_orders WHERE order_id=$1 AND product_id=$2',
-    products_orders4: 'SELECT SUM(price) as price, SUM(ammount) as ammount FROM products_orders WHERE order_id=$1',
+    products_orders3: 'SELECT * FROM products_orders WHERE order_id=$1 AND product_id=$2'
 }
 
 export function get(table) {
