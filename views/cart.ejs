@@ -34,7 +34,7 @@
     <% } %>
     <% if (locals.cart.length) { %>
         <cart>
-            <title class='cart-title'>Koszyk (<%= locals.cart_data.order_id %>) :</title>
+            <title class='cart-title'>Koszyk (<%= locals.cart_count  %>) :</title>
             <% for (let i of locals.cart) { %>
                 <item id="item-<%= i.product_id %>"> 
                     <img src="./../img/<%= i.image %>" alt="img" width="72" height="60"> 
@@ -50,7 +50,7 @@
         <order>
             <info class='cart-info'>
                 <title class='order-title'>Łączny koszt:</title>
-                <price><%= locals.cart_data.price/100 %> zł</price>
+                <price><%= locals.cart_value/100 %> zł</price>
             </info>
 
             <button class='order-btn'>Przejdź do dostawy</button>

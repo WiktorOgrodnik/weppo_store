@@ -30,25 +30,20 @@ app.post('/api/addToCart/:id/:ammount', (req, res) => {
 
         const product = await (getWithCondition('products'))([product_id]);
         const product_price = product.rows[0].price;
-        let order_id = undefined;
-        let order = undefined;
 
         if (!req.cookies.cart_id) {
-            order = await (add('orders'))([null, null, null, null, null, null, null, 0, 1, 0]);
-            order_id = order.rows[0].order_id;
+            const order = await (add('orders'))([null, null, null, null, null, null, null, 0, 1, 0]);
+            const order_id = order.rows[0].order_id;
 
             (add('products_orders'))([product_id, order_id, ammount, product_price]);
             res.cookie('cart_id', order_id);
         } else {
-            order_id = req.cookies.cart_id;
+            const order_id = req.cookies.cart_id;
             const products_orders = await (getWithCondition('products_orders3'))([order_id, product_id]);
 
             if (products_orders.rows.length) (update('products_orders'))([order_id, product_id, +products_orders.rows[0].ammount + +ammount, products_orders.rows[0].price]);
             else (add('products_orders'))([product_id, order_id, ammount, product_price]);
         }
-
-        order = await (getWithCondition('orders'))([order_id]);
-        (update('orders_when_add_to_cart'))([order_id, order.rows[0].price + product_price*ammount]);
 
         res.setHeader('Content-type', 'text/plain; charset=utf8;');
         res.end('Ok');
@@ -71,12 +66,6 @@ app.delete('/api/deleteFromCart/:id/:ammount', (req, res) => {
                 (deleted('products_orders'))([order_id, product_id]);
                 response = 'none';
             }
-
-            const order = await (getWithCondition('orders'))([order_id]);
-            const product = await (getWithCondition('products'))([product_id]);
-            const product_price = product.rows[0].price;
-            
-            (update('orders_when_add_to_cart'))([order_id, order.rows[0].price - product_price*ammount]);
         } 
 
         res.setHeader('Content-type', 'text/plain; charset=utf8;');
@@ -111,17 +100,19 @@ app.get('/cart', (req, res) => {
 
         const categories = await (get('categories'))();
         let products = [];
-        let cart_value = {};
+        let cart_value = 0;
+        let cart_count = 0;
 
         if (req.cookies.cart_id) {
             const cart = await (getWithCondition('products_orders2'))([req.cookies.cart_id]);
-            const cart_data = await (getWithCondition('orders'))([req.cookies.cart_id]);
+            const cart_data = await (getWithCondition('products_orders4'))([req.cookies.cart_id]);
 
             products = cart.rows;
-            cart_value = cart_data.rows[0];
+            cart_value = cart_data.rows ? cart_data.rows[0].price : 0;
+            cart_count = cart_data.rows ? cart_data.rows[0].ammount : 0;
         }
 
-        res.render('cart', {categories: categories.rows, cart: products, cart_data: cart_value});
+        res.render('cart', {categories: categories.rows, cart: products, cart_value: cart_value, cart_count: cart_count});
     })();
 });
 
