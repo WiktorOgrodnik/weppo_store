@@ -1,0 +1,22 @@
+<%- include('layout-top', {}) %>
+<main class='main-list'>
+
+    <div class="item-list">
+        <h3>Wyniki wyszukiwania <%= locals.query %>:</h3>
+
+        <all-items>
+            
+        <% for (let i of locals.products) {%> 
+            <prod class="product">
+                <img src="./../img/<%= i.image %>" alt="img" width="231" height="200">
+                <a href="/product/<%= i.product_id %>"><%= i.product_name %></a>
+                <price><%= i.price/100 %> zł</price>
+            </prod>
+        <% } %>
+    
+        </all-items>    
+    </div>
+    
+
+</main>
+<%- include('layout-bottom', {}) %>

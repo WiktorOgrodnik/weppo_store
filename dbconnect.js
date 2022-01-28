@@ -105,6 +105,10 @@ const createTableQueries = {
         FOREIGN KEY (payment_id) REFERENCES payment_methods (payment_method_id),
         FOREIGN KEY (status_id) REFERENCES statuses (status_id)
     );`,
+    tags: `tags (
+        tag_id SERIAL PRIMARY KEY,
+        tag_name VARCHAR(100) NOT NULL
+    );`,
     users_roles: `users_roles (
         user_id INT NOT NULL,
         role_id INT NOT NULL,
@@ -128,6 +132,13 @@ const createTableQueries = {
         PRIMARY KEY (product_id, category_id),
         FOREIGN KEY (product_id) REFERENCES products (product_id),
         FOREIGN KEY (category_id) REFERENCES categories (category_id)
+    );`,
+    tags_products: `tags_products (
+        product_id INT NOT NULL,
+        tag_id INT NOT NULL,
+        PRIMARY KEY (product_id, tag_id),
+        FOREIGN KEY (product_id) REFERENCES products (product_id),
+        FOREIGN KEY (tag_id) REFERENCES tags (tag_id)
     );`
 };
 
@@ -135,7 +146,6 @@ const createTableQueries = {
 
 function queryBuilder(query) {
     return async function (req) {
-
         const client = new Pool({connectionString: db, idleTimeoutMillis: 100});
         let toReturn = {};
 
@@ -207,7 +217,26 @@ const getQueryWithCondition = {
         FROM products_orders 
         INNER JOIN products ON products_orders.product_id = products.product_id 
         WHERE products_orders.order_id=$1;`,
-    products_orders3: 'SELECT * FROM products_orders WHERE order_id=$1 AND product_id=$2'
+    products_orders3: 'SELECT * FROM products_orders WHERE order_id=$1 AND product_id=$2',
+    products_search: `SELECT * FROM
+                        (SELECT * FROM
+                        (SELECT * FROM
+                            (SELECT * FROM 
+                            (SELECT * FROM 
+                            (SELECT
+                                products.product_id AS productid, 
+                                products.name AS product_name, 
+                                products.price, 
+                                products.disconted_price, 
+                                products.ammount, 
+                                products.description,
+                                products.image 
+                            FROM products) table1 
+                            LEFT JOIN categories_products ON table1.productid=categories_products.product_id) table2
+                        LEFT JOIN categories ON table2.category_id=categories.category_id) table3
+                        LEFT JOIN tags_products ON table3.productid=tags_products.product_id) table4
+                    LEFT JOIN tags ON table4.tag_id=tags.tag_id) table5
+                    WHERE table5.product_name ILIKE $1 OR table5.name ILIKE $1 OR table5.tag_name ILIKE $1;`
 }
 
 export function get(table) {
