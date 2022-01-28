@@ -2,8 +2,8 @@ import Pool from 'pg/lib/client.js';
 const env = process.env.DB_ENVIRONMENT || "development";
 
 const db_data = {
-    development: 'postgres://postgres:password@localhost:5432/weppo_store',
-    // development: 'postgres://postgres:142327@localhost:5432/weppo_store',
+    // development: 'postgres://postgres:password@localhost:5432/weppo_store',
+    development: 'postgres://postgres:142327@localhost:5432/weppo_store',
     production: process.env.DATABASE_URL
 };
 

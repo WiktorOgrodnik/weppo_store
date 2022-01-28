@@ -116,9 +116,7 @@ box-name {
 }
 
 /* Kolor 2 części loga */
-span {
-    color: green;
-}
+
 
 /* Wysuwane paski (kategorie i ustawienia) */
 .on {
@@ -375,12 +373,8 @@ item {
 }
 
 .cart-title {
-    padding-left: .5em;
-    display: grid;
-    padding-top: .5em;
-    padding-bottom: .5em;
-    color: darkgray;
-    font-size: larger;
+    padding: .5em;
+    padding-left: 1em;
 }
 
 order {
