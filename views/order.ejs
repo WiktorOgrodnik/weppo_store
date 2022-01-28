@@ -1,0 +1,51 @@
+<%- include('layout-top', {}) %>
+<main class='main-order'>
+    <div class='order-left-side'>
+        <h1 class='order-big-title'>Dostawa i płatność</h1>
+        
+        <div class='order-delivery'>
+            <h2 class="order-smaller-title">1. Sposób dostawy</h2>
+            <select class="selector" size="3" name="" id="">
+                <option class="option" value="">Kurier - InPost, UPS, FedEx, DTS<span class='order-description'>(20,00 zł)</span></option>
+                <option class="option" value="">Paczkomaty 24/7 <span class='order-description'>(9.00 zł)</span></option>
+                <option class="option" value="">Punkt odbioru - Poczta Polska, Żabka, Ruch, Orlen  <span class='order-description'>(8,90 zł)</span></option>
+            </select>
+        </div>
+        
+        <div class='order-payment'>
+            <h2 class="order-smaller-title">2. Metoda płatności</h2>
+            <select class="selector" size="7" name="" id="">
+                <option class="option" value="">BLIK <span class='order-description'>(bezpłatnie)</span></option>
+                <option class="option" value="">Karta płatnicza online <span class='order-description'>(bezpłatnie)</span></option>
+                <option class="option" value="">Płatność online <span class='order-description'>(30,89 zł)</span></option>
+                <option class="option" value="">Przelew gotówkowy <span class='order-description'>(bezpłatnie)</span></option>
+                <option class="option" value="">Przy odbiorze <span class='order-description'>(5,00 zł)</span></option>
+                <option class="option" value="">Raty <span class='order-description'>(bezpłatnie)</span></option>
+                <option class="option" value="">Leasing <span class='order-description'>(bezpłatnie)</span></option>
+            </select>
+        </div>
+        
+        <div class='order-personal-data' style="display: grid;">
+            <h2 class="order-smaller-title">3. Dane odbiorcy</h2>
+            <input class='order-data-input' type="text" placeholder="Imię i nazwisko lub nazwa firmy">
+            <input class='order-data-input' type="text" placeholder="Ulica i numer">
+            <input class='order-data-input' type="number" placeholder="Kod pocztowy">
+            <input class='order-data-input' type="text" placeholder="Miejscowośc">
+            <input class='order-data-input' type="email" placeholder="E-mail">
+           <input  class='order-data-input' name="" id="" type="number" placeholder="Telefon">
+        </div>
+
+    </div>
+
+    <div class='order-right-site'>
+        <div class='order-cart'>
+            
+        </div>
+        <div class="order-cart-info">
+            Do zapłaty: 10zł
+        </div>
+
+        <button>Złóż zamówienie</button>
+    </div>
+</main>
+<%- include('layout-bottom', {}) %>

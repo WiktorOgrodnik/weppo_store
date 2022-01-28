@@ -124,6 +124,13 @@ app.get('/contact', (req, res) => {
     })();
 });
 
+app.get('/order', (req, res) => {
+    (async () => {
+        const categories = await (get('categories'))();
+        res.render('order', {categories: categories.rows});
+    })();
+});
+
 app.get('/purchase_history', (req, res) => {
     (async () => {
         const categories = await (get('categories'))();
