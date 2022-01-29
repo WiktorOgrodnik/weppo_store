@@ -241,7 +241,7 @@ buy-box {
     display: inline;
 }
 
-info {
+.cart-info {
     padding-top: .5em;
     padding-left: 1em;
     display: flex;
@@ -249,7 +249,7 @@ info {
     font-size: large;
 }
 
-price {
+.price {
     place-self: left;
 }
 
@@ -333,7 +333,7 @@ empty-cart a {
     margin-top: .5em;
 }
 
-cart {
+.order-cart {
     display: grid;
     
     background-color: white;
@@ -341,7 +341,7 @@ cart {
     border-bottom: 1px solid gray;
 }
 
-cart a {
+item a {
     color: green;
     text-decoration: none;
 }
@@ -377,14 +377,14 @@ item {
     padding-left: 1em;
 }
 
-order {
+.order {
     display: grid;
     background-color: white;
     border-bottom: 1px solid gray;
     padding-bottom: 1em;
 }
 
-.main-cart {
+.main-cart .main-order {
     padding-top: 0%;
 }
 
@@ -412,10 +412,6 @@ order {
 
 /* Strona zamówienia */
 
-.main-order {
-    padding: 0;
-}
-
 .order-big-title {
    font-size: 1.4em; 
    padding-left: .3em;
@@ -432,6 +428,8 @@ order {
     margin-left: 5%;
     border: black solid 1px;
     border-radius: 1em;
+    background-color: white;
+    padding: .7em;
 }
 
 .option {
@@ -454,8 +452,8 @@ order {
 }
 
 .order-data-input {
-    width: 85%;
-    margin-left: 3%;
+    width: 83%;
+    margin-left: 5%;
     margin-bottom: .7em;
     border-radius: 1em;
     border: black solid 1px;
@@ -571,12 +569,12 @@ order {
 
     /* Ustawienia koszyka */
 
-    .main-cart {
+    .main-cart .main-order {
         margin-top: 1em;
         place-content: center;
     }
 
-    cart {
+    .order-cart {
         width: 45%;
         height: fit-content;
         margin-right: 1em;
@@ -585,12 +583,17 @@ order {
         border-radius: .5em;
     }
 
-    order {
+    .order {
         width: 25%;
         height: 140px;
         border: 1px solid gray;
         border-radius: 1em;
         padding: 1em;
+    }
+
+    #final-order {
+        width: auto;
+        border: none;
     }
 
     .cart-info {
@@ -612,6 +615,16 @@ order {
     .main-list {
         display: block;
     }
+
+    /* Ustawienia zamówień */
+    .order-left-side {
+        width: 35%;
+    }
+
+    #final-order-cart {
+        width: 35%;
+    }
+
 }
 
 
