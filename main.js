@@ -130,6 +130,7 @@ app.get('/search', (req, res) => {
         ];
 
         const products = !req.query.isEmpty() && req.query.query ? await (search('products_search', order_by.find(obj => obj.short_name == order_selected).sql))([`%${req.query.query}%`]) : {rows: []};
+        console.log(products.rows)
 
         res.render('search', {categories: categories.rows, query: req.query.query, orderby: order_selected, products: products.rows, order_by: order_by});
     })();
