@@ -1,7 +1,7 @@
 'use strict';
 
 import express from 'express';
-import { get, getWithCondition } from './dbconnect.js';
+import { get, getWithCondition, search } from './dbconnect.js';
 import cookieParser from 'cookie-parser';
 import { initApi } from './api.js';
 
@@ -105,8 +105,18 @@ app.get('/category/:id', (req, res) => {
 app.get('/search', (req, res) => {
     (async () => {
         const categories = await (get('categories'))();
-        const products = !req.query.isEmpty() && req.query.query != '' ? await (getWithCondition('products_search'))([`%${req.query.query}%`]) : {rows: []};
-        res.render('search', {categories: categories.rows, query: req.query.query, products: products.rows});
+        const order_selected = !req.query.isEmpty() && req.query.orderby ? req.query.orderby : 'alpha';
+
+        const order_by = [
+            {name: 'A-Z', short_name: 'alpha', sql: 'ORDER BY table5.product_name ASC;'},
+            {name: 'Z-A', short_name: 'revalpha', sql: 'ORDER BY table5.product_name DESC;'},
+            {name: 'Cena (od najmniejszych)', short_name: 'pricelow', sql: 'ORDER BY table5.price ASC;'},
+            {name: 'Cena (od największych)', short_name: 'pricetop', sql: 'ORDER BY table5.price DESC;'}
+        ];
+
+        const products = !req.query.isEmpty() && req.query.query ? await (search('products_search', order_by.find(obj => obj.short_name == order_selected).sql))([`%${req.query.query}%`]) : {rows: []};
+
+        res.render('search', {categories: categories.rows, query: req.query.query, orderby: order_selected, products: products.rows, order_by: order_by});
     })();
 });
 

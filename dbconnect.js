@@ -22,9 +22,11 @@ const tables = [
     'personal_data',
     'users',
     'orders',
+    'tags',
     'products_orders',
     'users_roles',
-    'categories_products'
+    'categories_products',
+    'tags_products'
 ];
 
 const createTableQueries = {
@@ -269,4 +271,11 @@ const deleteQuery = {
 
 export function deleted(table) {
     return queryBuilder(deleteQuery[table]);
+}
+
+export function search(table, addon) {
+    const query = getQueryWithCondition[table].slice(0, -1) + ' ' + addon;
+    console.log(query);
+
+    return queryBuilder(query);
 }
