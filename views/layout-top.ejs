@@ -18,9 +18,9 @@
             <a class="logo" href="/">Weppo<span style="color: green">Store</span></a>
             <a class="logo-mob" href="/">W<span style="color: green">S</span></a>
 
-            <div class='search-box'>
-                <form method="get" action="<%= locals.static_correction %>search">
-                    <input class="search-text" type="text" name="query">
+            <div>
+                <form class='search-box' method="get" action="<%= locals.static_correction %>search">
+                    <input class="search-text" type="text" name="query" placeholder='Czego szukasz?'>
                     <button class="search"><img id="search-but" class="search-button" src="https://img.icons8.com/windows/32/000000/search--v2.png" alt="Search"></button> 
                 </form>   
             </div>
@@ -60,7 +60,7 @@
             const mobileBtn_Exit_sec = document.getElementById('secondary-nav-exit');
             
             const nav_primary = document.querySelector('nav-primary');
-            const nav_secondary = document.querySelector('nav-secondary')
+            const nav_secondary = document.querySelector('nav-secondary');
 
             mobileBtn.addEventListener('click', () => {
                 nav_primary.classList.replace('off','on');
@@ -68,7 +68,7 @@
 
             mobileBtn_Kat.addEventListener('click', () => {
                 nav_secondary.classList.replace('off','on');
-            })
+            });
 
             mobileBtn_Exit.addEventListener('click', () => {
                 nav_primary.classList.replace('on','off');
@@ -76,7 +76,7 @@
             
             mobileBtn_Exit_sec.addEventListener('click', () => {
                 nav_secondary.classList.replace('on','off');
-            })
+            });
 
         </script>
 

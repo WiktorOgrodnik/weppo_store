@@ -24,7 +24,9 @@ const tables = [
     'orders',
     'products_orders',
     'users_roles',
-    'categories_products'
+    'categories_products',
+    'tags',
+    'tags_products'
 ];
 
 const createTableQueries = {

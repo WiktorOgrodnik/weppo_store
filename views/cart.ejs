@@ -29,6 +29,10 @@
 
             const counterAll = document.getElementById('cart-items-count');
             counterAll.innerHTML = +counterAll.innerHTML - 1;
+
+            if (+counterAll.innerHTML == 0) {
+                history.go(0);
+            }
         }
     </script>
 
@@ -40,7 +44,7 @@
         </empty-cart>
     <% } %>
     <% if (locals.cart.length) { %>
-        <cart>
+        <div class="order-cart">
             <h3 class='cart-title'>Koszyk (<span id="cart-items-count"><%= locals.cart_count %></span>):</h3>
             <% for (let i of locals.cart) { %>
                 <item id="item-<%= i.product_id %>"> 
@@ -53,15 +57,15 @@
                     </info> 
                 </item>
             <% } %>
-        </cart>
-        <order>
-            <info class='cart-info'>
-                <title class='order-title'>Łączny koszt:</title>
-                <price><span id="cart-price"><%= locals.cart_value/100 %></span> zł</price>
-            </info>
+        </div>
+        <div class="order">
+            <div class='cart-info'>
+                <span class='order-title'>Łączny koszt:</span>
+                <span class="price"><span id="cart-price"><%= locals.cart_value/100 %></span> zł</span>
+            </div>
 
-            <button class='order-btn'>Przejdź do dostawy</button>
-        </order>
+            <button class='order-btn' onclick="window.location.href = '/order'">Przejdź do dostawy</button>
+        </div>
     <% } %>
 </main>
 <%- include('layout-bottom', {}) %>
