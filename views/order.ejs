@@ -31,11 +31,11 @@
                 <input class='order-data-input' type="email" name="email" placeholder="E-mail" value="<%= locals.email %>">
                 <input class='order-data-input' type="tel" name="tel" placeholder="Telefon" value="<%= locals.tel %>">
             </div>
-
-            <button>Złóż zamówienie (placeholder)</button>
+            
+            <button class="order-btn">Złóż zamówienie (placeholder) </button>
             <span style="color: red;"><%= locals.error_message ? `Wiadomość serwera: ${locals.error_message}` : ''; %></span>
         </form>
-
+        </div>
     </div>
 
 

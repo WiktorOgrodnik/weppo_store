@@ -55,6 +55,28 @@ app.get('/cart', (req, res) => {
     })();
 });
 
+app.get('/bill', (req, res) => {
+    (async () => {
+
+        const categories = await (get('categories'))();
+        let products = [];
+        let cart_value = 0;
+        let cart_count = 0;
+
+        if (req.cookies.cart_id) {
+            const cart = await (getWithCondition('products_orders2'))([req.cookies.cart_id]);
+            products = cart.rows;
+
+            for (let k of products) {
+                cart_value += k.ammount * k.price;
+                cart_count += k.ammount;
+            }
+        }
+
+        res.render('bill', {categories: categories.rows, cart: products, cart_value: cart_value, cart_count: cart_count});
+    })();
+});
+
 app.get('/contact', (req, res) => {
     (async () => {
         const categories = await (get('categories'))();
