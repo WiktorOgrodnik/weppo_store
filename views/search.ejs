@@ -14,15 +14,18 @@
         </form>
 
         <all-items>
-            
-        <% for (let i of locals.products) { %> 
-            <prod class="product">
-                <img src="./../img/<%= i.image %>" alt="img" width="231" height="200">
-                <a href="/product/<%= i.productid %>"><%= i.product_name %></a>
-                <price><%= i.price/100 %> zł</price>
-            </prod>
+        <% if (locals.products.length) { %>
+            <% for (let i of locals.products) { %> 
+                <prod class="product">
+                    <img src="./../img/<%= i.image %>" alt="img" width="231" height="200">
+                    <a href="/product/<%= i.productid %>"><%= i.product_name %></a>
+                    <price><%= i.price/100 %> zł</price>
+                </prod>
+            <% } %>
+        <% } else { %>
+            <%- include('message-module', {static_correction: './..', message: 'Niestety nic nie znaleziono :('}); %>
         <% } %>
-    
+        
         </all-items>    
     </div>
     

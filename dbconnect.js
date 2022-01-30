@@ -53,11 +53,13 @@ const createTableQueries = {
     );`,
     deliveries: `deliveries (
         delivery_id SERIAL PRIMARY KEY,
-        name VARCHAR(50) NOT NULL
+        delivery_name VARCHAR(50) NOT NULL,
+        delivery_price INT NOT NULL
     );`,
     payment_methods: `payment_methods (
         payment_method_id SERIAL PRIMARY KEY,
-        name VARCHAR(50) NOT NULL
+        payment_name VARCHAR(50) NOT NULL,
+        payment_price INT NOT NULL
     );`,
     statuses: `statuses (
         status_id SERIAL PRIMARY KEY,
@@ -69,9 +71,8 @@ const createTableQueries = {
     );`,
     personal_data: `personal_data (
         perdata_id BIGSERIAL PRIMARY KEY,
-        first_name VARCHAR(50) NOT NULL,
-        second_name VARCHAR(60) NOT NULL,
-        pesel VARCHAR(11) NOT NULL,
+        personal_name VARCHAR(100) NOT NULL,
+        pesel VARCHAR(11),
         nip VARCHAR(10),
         regon VARCHAR(14),
         adress_id INT,
@@ -79,12 +80,13 @@ const createTableQueries = {
     );`,
     users: `users (
         user_id BIGSERIAL PRIMARY KEY,
-        email VARCHAR(255) UNIQUE NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        tel VARCHAR(30) NOT NULL,
         passwd VARCHAR(255) NOT NULL,
         can_login BIT(1) NOT NULL,
         is_verified BIT(1) NOT NULL,
         perdata_def_id INT,
-        created_on TIMESTAMP NOT NULL,
+        created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         last_login TIMESTAMP,
         FOREIGN KEY (perdata_def_id) REFERENCES personal_data (perdata_id)
     );`,
@@ -92,7 +94,7 @@ const createTableQueries = {
         order_id uuid DEFAULT uuid_generate_v4 () PRIMARY KEY,
         user_id INT,
         perdata_id INT,
-        other_adress_id INT,
+        other_address_id INT,
         order_date TIMESTAMP,
         end_date TIMESTAMP,
         delivery_id INT,
@@ -102,7 +104,7 @@ const createTableQueries = {
         price INT,
         FOREIGN KEY (user_id) REFERENCES users (user_id),
         FOREIGN KEY (perdata_id) REFERENCES personal_data (perdata_id),
-        FOREIGN KEY (other_adress_id) REFERENCES addresses (adress_id),
+        FOREIGN KEY (other_address_id) REFERENCES addresses (adress_id),
         FOREIGN KEY (delivery_id) REFERENCES deliveries (delivery_id),
         FOREIGN KEY (payment_id) REFERENCES payment_methods (payment_method_id),
         FOREIGN KEY (status_id) REFERENCES statuses (status_id)
@@ -114,7 +116,7 @@ const createTableQueries = {
     users_roles: `users_roles (
         user_id INT NOT NULL,
         role_id INT NOT NULL,
-        grant_date TIMESTAMP,
+        grant_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (user_id, role_id),
         FOREIGN KEY (user_id) REFERENCES users (user_id),
         FOREIGN KEY (role_id) REFERENCES roles (role_id)
@@ -155,7 +157,7 @@ function queryBuilder(query) {
         try {
             toReturn = await client.query(query, req);
         } catch (err) {
-            console.error('Something unexpected happened: ' + err.stack);
+            console.error(`Something unexpected happened for query: ${query}, more info ${err.stack}`);
         } finally {
             client.end();
         }
@@ -193,7 +195,16 @@ const addQuery = {
     categories_products: 'INSERT INTO categories_products VALUES ($1, $2);',
     orders: 'INSERT INTO orders VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING order_id;',
     statuses: 'INSERT INTO statuses VALUES (DEFAULT, $1);',
-    products_orders: 'INSERT INTO products_orders VALUES ($1, $2, $3, $4);'
+    products_orders: 'INSERT INTO products_orders VALUES ($1, $2, $3, $4);',
+    tags: 'INSERT INTO tags VALUES (DEFAULT, $1);',
+    tags_products: 'INSERT INTO tags_products VALUES ($1, $2);',
+    deliveries: 'INSERT INTO deliveries VALUES (DEFAULT, $1, $2);',
+    payment_methods: 'INSERT INTO payment_methods VALUES (DEFAULT, $1, $2);',
+    addresses: 'INSERT INTO addresses VALUES (DEFAULT, $1, $2, $3, $4, $5) RETURNING adress_id;',
+    personal_data: 'INSERT INTO personal_data VALUES (DEFAULT, $1, $2, $3, $4, $5) RETURNING perdata_id;',
+    roles: 'INSERT INTO roles VALUES (DEFAULT, $1);',
+    users: 'INSERT INTO users VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, DEFAULT, $7) RETURNING user_id;',
+    users_roles: 'INSERT INTO users_roles VALUES ($1, $2, DEFAULT);'
 }
 
 export function add(table) {
@@ -206,7 +217,9 @@ const getQuery = {
     products: 'SELECT * FROM products;',
     categories: 'SELECT * FROM categories;',
     categories_products: 'SELECT * FROM categories_products;',
-    orders: 'SELECT * FROM orders;'
+    orders: 'SELECT * FROM orders;',
+    deliveries: 'SELECT * FROM deliveries;',
+    payment_methods: 'SELECT * FROM payment_methods;'
 }
 
 const getQueryWithCondition = {
@@ -238,7 +251,9 @@ const getQueryWithCondition = {
                         LEFT JOIN categories ON table2.category_id=categories.category_id) table3
                         LEFT JOIN tags_products ON table3.productid=tags_products.product_id) table4
                     LEFT JOIN tags ON table4.tag_id=tags.tag_id) table5
-                    WHERE table5.product_name ILIKE $1 OR table5.name ILIKE $1 OR table5.tag_name ILIKE $1;`
+                    WHERE table5.product_name ILIKE $1 OR table5.name ILIKE $1 OR table5.tag_name ILIKE $1;`,
+    deliveries: 'SELECT * FROM deliveries WHERE delivery_id=$1;',
+    payment_methods: 'SELECT * FROM payment_methods WHERE payment_method_id=$1;'
 }
 
 export function get(table) {
@@ -255,7 +270,19 @@ const updateQuery = {
     products_orders: `UPDATE products_orders
     SET ammount=$3,
         price=$4
-    WHERE order_id=$1 AND product_id=$2;`
+    WHERE order_id=$1 AND product_id=$2;`,
+    orders: `UPDATE orders
+    SET user_id=$2,
+        perdata_id=$3,
+        other_address_id=$4,
+        order_date=(TO_TIMESTAMP($5 / 1000.0)),
+        end_date=$6,
+        delivery_id=$7,
+        payment_id=$8,
+        is_paid=$9,
+        status_id=$10,
+        price=$11
+    WHERE order_id=$1;`
 }
 
 export function update(table) {
@@ -275,7 +302,5 @@ export function deleted(table) {
 
 export function search(table, addon) {
     const query = getQueryWithCondition[table].slice(0, -1) + ' ' + addon;
-    console.log(query);
-
     return queryBuilder(query);
 }

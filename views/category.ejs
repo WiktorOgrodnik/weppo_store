@@ -5,13 +5,19 @@
         <h3>Produkty z kategorii:</h3>
 
         <all-items>
+
+        <% if (locals.products.length) { %>
             
-        <% for (let i of locals.products) {%> 
-            <prod class="product">
-                <img src="./../img/<%= i.image %>" alt="img" width="231" height="200">
-                <a href="/product/<%= i.product_id %>"><%= i.name %></a>
-                <price><%= i.price/100 %> zł</price>
-            </prod>
+            <% for (let i of locals.products) {%> 
+                <prod class="product">
+                    <img src="./../img/<%= i.image %>" alt="img" width="231" height="200">
+                    <a href="/product/<%= i.product_id %>"><%= i.name %></a>
+                    <price><%= i.price/100 %> zł</price>
+                </prod>
+            <% } %>
+        
+        <% } else { %>
+            <%- include('message-module', {static_correction: './..', message: 'Ta kategoria jest pusta'}); %>
         <% } %>
     
         </all-items>    

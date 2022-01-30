@@ -1,0 +1,6 @@
+<%- include('layout-top', {}) %>
+<main>
+    <%- include('message-module', {message: 'Zamówienie w trakcie realizacji!'}) %>
+    <span>Twoje zamówienie znajdziesz pod adresem https://weppo-store.herokuapp.com/orders/<%=locals.order_id %></span>
+</main>
+<%- include('layout-bottom', {}) %>

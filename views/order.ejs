@@ -2,63 +2,44 @@
 <main class='main-order'>
     <div class='order-left-side'>
         <h1 class='order-big-title'>Dostawa i płatność</h1>
-        
-        <div class='order-delivery'>
-            <h2 class="order-smaller-title">1. Sposób dostawy</h2>
-            <select class="selector"  name="" id="">
-                <option class="option" value="">Kurier - InPost, UPS, FedEx, DTS<span class='order-description'>(20,00 zł)</span></option>
-                <option class="option" value="">Paczkomaty 24/7 <span class='order-description'>(9.00 zł)</span></option>
-                <option class="option" value="">Punkt odbioru - Poczta Polska, Żabka <span class='order-description'>(8,90 zł)</span></option>
-            </select>
-        </div>
-        
-        <div class='order-payment'>
-            <h2 class="order-smaller-title">2. Metoda płatności</h2>
-            <select class="selector" name="" id="">
-                <option class="option" value="">BLIK <span class='order-description'>(bezpłatnie)</span></option>
-                <option class="option" value="">Karta płatnicza online <span class='order-description'>(bezpłatnie)</span></option>
-                <option class="option" value="">Płatność online <span class='order-description'>(30,89 zł)</span></option>
-                <option class="option" value="">Przelew gotówkowy <span class='order-description'>(bezpłatnie)</span></option>
-                <option class="option" value="">Przy odbiorze <span class='order-description'>(5,00 zł)</span></option>
-                <option class="option" value="">Raty <span class='order-description'>(bezpłatnie)</span></option>
-                <option class="option" value="">Leasing <span class='order-description'>(bezpłatnie)</span></option>
-            </select>
-        </div>
-        
-        <div class='order-personal-data' style="display: grid;">
-            <h2 class="order-smaller-title">3. Dane odbiorcy</h2>
-            <input class='order-data-input' type="text" placeholder="Imię i nazwisko lub nazwa firmy">
-            <input class='order-data-input' type="text" placeholder="Ulica i numer">
-            <input class='order-data-input' type="number" placeholder="Kod pocztowy">
-            <input class='order-data-input' type="text" placeholder="Miejscowośc">
-            <input class='order-data-input' type="email" placeholder="E-mail">
-           <input  class='order-data-input' name="" id="" type="number" placeholder="Telefon">
-        </div>
 
-    </div>
-
-    
-    <div class='order-cart' id="final-order-cart">
-        <h3 class='cart-title'>Koszyk (<span id="cart-items-count"><%= locals.cart_count %></span>):</h3>
-        <% for (let i of locals.cart) { %>
-            <item id="item-<%= i.product_id %>"> 
-                <img src="./../img/<%= i.image %>" alt="img" width="72" height="60"> 
-                <a href="/product/<%= i.product_id %>"><%= i.name %></a>  
-                <info class='item-info'>
-                    <amount id="item-ammount-<%= i.product_id %>" class='item-ammount'><%= i.ammount %></amount> 
-                    <price class='item-price'><span id="item-price-<%= i.product_id %>"><%= i.price/100 %></span> zł</price>
-                </info> 
-            </item>
-        <% } %>
-        
-        <div class="order" id="final-order">
-            <div class="cart-info">
-                <span class="order-title">Do zapłaty:</span>
-                <span class="price"><span id="cart-price"><%= locals.cart_value/100 %></span> zł</span>
+        <form method="post" novalidate>
+            <div class='order-delivery'>
+                <h2 class="order-smaller-title">1. Sposób dostawy</h2>
+                <select class="selector" name="delivery" id="">
+                    <% for (let i of deliveries) { %>
+                        <option class="option" value="<%= i.delivery_id %>"><%= i.delivery_name %> <span class='order-description'>(<%= i.delivery_price ? i.delivery_price/100 + ' zł' : 'bezpłatne' %>)</span></option>
+                    <% } %>
+                </select>
+            </div>
+            
+            <div class='order-payment'>
+                <h2 class="order-smaller-title">2. Metoda płatności</h2>
+                <select class="selector" name="payment" id="">
+                    <% for (let i of payment_methods) { %>
+                        <option class="option" value="<%= i.payment_method_id %>"><%= i.payment_name %> <span class='order-description'>(<%= i.payment_price ? i.payment_price/100 + ' zł' : 'bezpłatne' %>)</span></option>
+                    <% } %>
+                </select>
+            </div>
+            
+            <div class='order-personal-data' style="display: grid;">
+                <h2 class="order-smaller-title">3. Dane odbiorcy</h2>
+                <input class='order-data-input' type="text" name="name" placeholder="Imię i nazwisko lub nazwa firmy" value="<%= locals.name %>">
+                <input class='order-data-input' type="text" name="adress" placeholder="Ulica i numer" value="<%= locals.address %>">
+                <input class='order-data-input' type="text" name="postal_code" placeholder="Kod pocztowy" value="<%= locals.postal_code %>">
+                <input class='order-data-input' type="text" name="city" placeholder="Miejscowośc" value="<%= locals.city %>">
+                <input class='order-data-input' type="email" name="email" placeholder="E-mail" value="<%= locals.email %>">
+                <input class='order-data-input' type="tel" name="tel" placeholder="Telefon" value="<%= locals.tel %>">
             </div>
 
-            <button class="order-btn">Złóż zamówienie</button>
-        </div>
+            <button>Złóż zamówienie (placeholder)</button>
+            <span style="color: red;"><%= locals.error_message ? `Wiadomość serwera: ${locals.error_message}` : ''; %></span>
+        </form>
+
     </div>
+
+
+    <%- include('cart-module', {cart: locals.cart, cart_count: locals.cart_count, type: 'order'}) %> 
+    
 </main>
 <%- include('layout-bottom', {}) %>
