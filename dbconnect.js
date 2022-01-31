@@ -227,12 +227,19 @@ const getQueryWithCondition = {
     categories: 'SELECT * FROM categories WHERE category_id=$1;',
     categories_products: 'SELECT * FROM (SELECT * FROM products LEFT JOIN categories_products ON products.product_id = categories_products.product_id) temp WHERE temp.category_id=$1;',
     orders: 'SELECT * FROM orders WHERE order_id=$1;',
+    orders2: 'SELECT * FROM orders WHERE order_id=$1 AND status_id > 1;',
     products_orders: 'SELECT * FROM products_orders WHERE order_id=$1',
-    products_orders2: `SELECT products_orders.product_id, products_orders.order_id, products_orders.ammount, products_orders.price, products.name, products.image 
-        FROM products_orders 
-        INNER JOIN products ON products_orders.product_id = products.product_id 
-        WHERE products_orders.order_id=$1;`,
+    products_orders2: `SELECT orders.status_id, table1.product_id, table1.order_id, table1.ammount, table1.price, table1.name, table1.image FROM 
+                        (SELECT products_orders.product_id, products_orders.order_id, products_orders.ammount, products_orders.price, products.name, products.image 
+                            FROM products_orders 
+                            INNER JOIN products ON products_orders.product_id = products.product_id) table1 INNER JOIN orders ON table1.order_id = orders.order_id
+                            WHERE table1.order_id=$1 AND orders.status_id=1;`,
     products_orders3: 'SELECT * FROM products_orders WHERE order_id=$1 AND product_id=$2',
+    products_orders4: `SELECT orders.status_id, table1.product_id, table1.order_id, table1.ammount, table1.price, table1.name, table1.image FROM 
+                        (SELECT products_orders.product_id, products_orders.order_id, products_orders.ammount, products_orders.price, products.name, products.image 
+                            FROM products_orders 
+                            INNER JOIN products ON products_orders.product_id = products.product_id) table1 INNER JOIN orders ON table1.order_id = orders.order_id
+                            WHERE table1.order_id=$1 AND orders.status_id>1;`,
     products_search: `SELECT * FROM
                         (SELECT * FROM
                         (SELECT * FROM
@@ -253,7 +260,10 @@ const getQueryWithCondition = {
                     LEFT JOIN tags ON table4.tag_id=tags.tag_id) table5
                     WHERE table5.product_name ILIKE $1 OR table5.name ILIKE $1 OR table5.tag_name ILIKE $1;`,
     deliveries: 'SELECT * FROM deliveries WHERE delivery_id=$1;',
-    payment_methods: 'SELECT * FROM payment_methods WHERE payment_method_id=$1;'
+    payment_methods: 'SELECT * FROM payment_methods WHERE payment_method_id=$1;',
+    users: 'SELECT * FROM users WHERE user_id=$1;',
+    personal_data: 'SELECT * FROM personal_data WHERE perdata_id=$1;',
+    addresses: 'SELECT * FROM addresses WHERE adress_id=$1;'
 }
 
 export function get(table) {

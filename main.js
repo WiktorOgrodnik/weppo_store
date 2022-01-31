@@ -4,7 +4,7 @@ import express from 'express';
 import { add, get, getWithCondition, search, update } from './dbconnect.js';
 import cookieParser from 'cookie-parser';
 import { initApi } from './api.js';
-import { cartModule } from './modules.js'
+import { cartModule, orderFormModule } from './modules.js'
 import { validators } from './validators.js';
 
 Object.prototype.isEmpty = function () {
@@ -31,69 +31,16 @@ app.get('/', (req, res) => {
     })();
 });
 
-app.get('/settings', (req, res) => {
-    (async () => {
-        const categories = await (get('categories'))();
-        res.render('settings', {categories: categories.rows});
-    })();
-}); 
-
-app.get('/account', (req, res) => {
-    (async () => {
-        const categories = await (get('categories'))();
-        res.render('account', {categories: categories.rows});
-    })();
-});
-
-app.get('/cart', (req, res) => {
-    (async () => {
-
-        const categories = await (get('categories'))();
-        const cart = await cartModule(req);
-
-        res.render('cart', Object.assign({categories: categories.rows}, cart));
-    })();
-});
-
-app.get('/bill', (req, res) => {
-    (async () => {
-
-        const categories = await (get('categories'))();
-        let products = [];
-        let cart_value = 0;
-        let cart_count = 0;
-
-        if (req.cookies.cart_id) {
-            const cart = await (getWithCondition('products_orders2'))([req.cookies.cart_id]);
-            products = cart.rows;
-
-            for (let k of products) {
-                cart_value += k.ammount * k.price;
-                cart_count += k.ammount;
-            }
-        }
-
-        res.render('bill', {categories: categories.rows, cart: products, cart_value: cart_value, cart_count: cart_count});
-    })();
-});
-
-app.get('/contact', (req, res) => {
-    (async () => {
-        const categories = await (get('categories'))();
-        res.render('contact', {categories: categories.rows});
-    })();
-});
+/**
+ * Orders
+ */
 
 app.get('/order', (req, res) => {
     (async () => {
-        const categories = await (get('categories'))();
-        const cart = await cartModule(req);
+        const data = await orderFormModule(req.cookies.cart_id);
 
-        const payment_methods = await (get('payment_methods')());
-        const deliveries = await (get('deliveries')());
-
-        if (cart.cart_count == 0) res.redirect('/cart');
-        else res.render('order', Object.assign({categories: categories.rows, payment_methods: payment_methods.rows, deliveries: deliveries.rows}, cart));
+        if (data.cart.cart_count == 0) res.redirect('/cart');
+        else res.render('order', data);
     })();
 });
 
@@ -138,13 +85,9 @@ app.post('/order', (req, res) => {
                 tel: tel
             }
 
-            const categories_e = await (get('categories'))();
-            const cart_e = await cartModule(req);
+            const data = await orderFormModule(req.cookies.cart_id);
 
-            const payment_methods_e = await (get('payment_methods')());
-            const deliveries_e = await (get('deliveries')());
-
-            res.render('order', Object.assign({categories: categories_e.rows, payment_methods: payment_methods_e.rows, deliveries: deliveries_e.rows, error_message: error_message}, cart_e, oldData));
+            res.render('order', Object.assign(data, oldData, {error_message: error_message}));
         } else {
         
             /*Validation completed*/
@@ -165,14 +108,51 @@ app.post('/order', (req, res) => {
             
             const payment_price = await (getWithCondition('payment_methods')([payment_id]));
             const delivery_price = await (getWithCondition('deliveries')([delivery_id]));
-            const cart_price = (await cartModule(req)).cart_value;
+            const cart_price = (await cartModule(req.cookies.cart_id, 'cart')).cart_value;
 
             order.price = cart_price + payment_price.rows[0].payment_price + delivery_price.rows[0].delivery_price;
 
             await update('orders')([req.cookies.cart_id, order.user_id, order.perdata_id, order.other_address_id, order.order_date, order.end_date, order.delivery_id, order.payment_id, order.is_paid, order.status_id, order.price]);
 
             res.clearCookie('cart_id');
-            res.redirect(`/order-success?id=${order.order_id}`);
+            res.redirect(`/orders/${order.order_id}`);
+        }
+    })();
+});
+
+// Need some try-catch
+app.get('/orders/:id', (req, res) => {
+    (async () => {
+        const categories = await (get('categories'))();
+        const cart = await cartModule(req.params.id, 'order');
+        const order = await (getWithCondition('orders2'))([req.params.id]);
+
+        if (order?.rows?.length) {
+            const deliveries = await (getWithCondition('deliveries'))([order.rows[0].delivery_id]);
+            const payment_methods = await (getWithCondition('payment_methods'))([order.rows[0].payment_id]);
+            const user = await (getWithCondition('users'))([order.rows[0].user_id]);
+            const perdata = await (getWithCondition('personal_data'))([order.rows[0].perdata_id]);
+            if (perdata?.rows?.length) {
+                const address = await (getWithCondition('addresses'))([perdata.rows[0].adress_id]);
+
+                const data = {
+                    delivery_name: deliveries.rows[0].delivery_name,
+                    payment_method: payment_methods.rows[0].payment_name,
+                    name: perdata.rows[0].personal_name,
+                    email: user.rows[0].email,
+                    tel: user.rows[0].tel,
+                    address_line_1: address.rows[0].line_adress_1,
+                    postal_code: address.rows[0].postal_code,
+                    city: address.rows[0].city
+                }
+
+                res.render('bill', Object.assign({categories: categories.rows}, cart, data));
+
+            } else {
+                res.render('bill', {categories: categories.rows, error_message: 'Nieoczekiwany błąd serwera'});
+            }
+        } else {
+            res.render('bill', {categories: categories.rows, error_message: 'Nie ma takiego zamówienia, sprawdź czy numer zamówienia jest prawidłowy'});
         }
     })();
 });
@@ -185,12 +165,23 @@ app.get('/order-success', (req, res) => {
     })();
 });
 
-app.get('/purchase_history', (req, res) => {
+/**
+ * Cart
+ */
+
+app.get('/cart', (req, res) => {
     (async () => {
+
         const categories = await (get('categories'))();
-        res.render('purchase_history', {categories: categories.rows});
+        const cart = await cartModule(req.cookies.cart_id, 'cart');
+
+        res.render('cart', Object.assign({categories: categories.rows}, cart));
     })();
 });
+
+/**
+ * Displaying products and search
+ */
 
 app.get('/product/:id', (req, res) => {
     (async () => {
@@ -222,6 +213,38 @@ app.get('/search', (req, res) => {
 
         const products = !req.query.isEmpty() && req.query.query ? await (search('products_search', order_by.find(obj => obj.short_name == order_selected).sql))([`%${req.query.query}%`]) : {rows: []};
         res.render('search', {categories: categories.rows, query: req.query.query, orderby: order_selected, products: products.rows, order_by: order_by});
+    })();
+});
+
+/**
+ * Other
+ */
+
+app.get('/settings', (req, res) => {
+    (async () => {
+        const categories = await (get('categories'))();
+        res.render('settings', {categories: categories.rows});
+    })();
+}); 
+
+app.get('/account', (req, res) => {
+    (async () => {
+        const categories = await (get('categories'))();
+        res.render('account', {categories: categories.rows});
+    })();
+});
+
+app.get('/contact', (req, res) => {
+    (async () => {
+        const categories = await (get('categories'))();
+        res.render('contact', {categories: categories.rows});
+    })();
+});
+
+app.get('/purchase_history', (req, res) => {
+    (async () => {
+        const categories = await (get('categories'))();
+        res.render('purchase_history', {categories: categories.rows});
     })();
 });
 

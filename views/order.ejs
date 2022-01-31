@@ -3,7 +3,7 @@
     <div class='order-left-side'>
         <h1 class='order-big-title'>Dostawa i płatność</h1>
 
-        <form method="post" novalidate>
+        <form method="post">
             <div class='order-delivery'>
                 <h2 class="order-smaller-title">1. Sposób dostawy</h2>
                 <select class="selector" name="delivery" id="">
@@ -39,7 +39,7 @@
     </div>
 
 
-    <%- include('cart-module', {cart: locals.cart, cart_count: locals.cart_count, type: 'order'}) %> 
+    <%- include('cart-module', {cart: locals.cart, cart_count: locals.cart_count, title: 'Koszyk', orderButton: true}) %> 
     
 </main>
 <%- include('layout-bottom', {}) %>

@@ -1,25 +1,29 @@
-<div class="order-cart" <%= locals.type == 'order' ? 'id="final-order-cart"' : ''%>>
-    <h3 class='cart-title'>Koszyk (<span id="cart-items-count"><%= locals.cart_count %></span>):</h3>
-    <% for (let i of locals.cart) { %>
-        <item id="item-<%= i.product_id %>"> 
-            <img src="./../img/<%= i.image %>" alt="img" width="72" height="60"> 
-            <a href="/product/<%= i.product_id %>"><%= i.name %></a>  
-            <info class='item-info'>
-                <amount id="item-ammount-<%= i.product_id %>" class='item-ammount'><%= i.ammount %></amount> 
-                <price class='item-price'><span id="item-price-<%= i.product_id %>"><%= i.price/100 %></span> zł</price>
-                <% if (locals.type == 'cart') { %>  <button onclick="deleteFromCart('<%= i.product_id %>')">Delete one</button> <% } %>
-            </info> 
-        </item>
-    <% } %>
+<div class="order-cart" <%= locals.orderButton ? 'id="final-order-cart"' : ''%>>
+    <% if (locals.cart?.length) { %>
+        <h3 class='cart-title'><%= locals.title %> (<span id="cart-items-count"><%= locals.cart_count %></span>):</h3>
+        <% for (let i of locals.cart) { %>
+            <item id="item-<%= i.product_id %>"> 
+                <img src="./../img/<%= i.image %>" alt="img" width="72" height="60"> 
+                <a href="/product/<%= i.product_id %>"><%= i.name %></a>  
+                <info class='item-info'>
+                    <amount id="item-ammount-<%= i.product_id %>" class='item-ammount'><%= i.ammount %></amount> 
+                    <price class='item-price'><span id="item-price-<%= i.product_id %>"><%= i.price/100 %></span> zł</price>
+                    <% if (locals.enableDelete) { %>  <button onclick="deleteFromCart('<%= i.product_id %>')">Delete one</button> <% } %>
+                </info> 
+            </item>
+        <% } %>
 
-    <% if (locals.type == 'order') { %>
-        <div class="order" id="final-order">
-            <div class="cart-info">
-                <span class="order-title">Do zapłaty:</span>
-                <span class="price"><span id="cart-price"><%= locals.cart_value/100 %></span> zł</span>
+        <% if (locals.orderButton) { %>
+            <div class="order" id="final-order">
+                <div class="cart-info">
+                    <span class="order-title">Do zapłaty:</span>
+                    <span class="price"><span id="cart-price"><%= locals.cart_value/100 %></span> zł</span>
+                </div>
+        
+                <button class="order-btn">Złóż zamówienie</button>
             </div>
-    
-            <button class="order-btn">Złóż zamówienie</button>
-        </div>
+        <% } %>
+    <% } else { %>
+        <%- include('message-module', {static_correction: './../..', message: 'Nie można załadować modułu!'}); %>
     <% } %>
 </div>

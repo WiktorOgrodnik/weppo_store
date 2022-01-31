@@ -40,7 +40,7 @@
         <%- include('message-module', {message: 'Twój koszyk jest pusty'}) %> 
     <% } %>
     <% if (locals.cart.length) { %>
-        <%- include('cart-module', {cart: locals.cart, cart_count: locals.cart_count, type: 'cart'}) %> 
+        <%- include('cart-module', {cart: locals.cart, cart_count: locals.cart_count, enableDelete: true, title: 'Koszyk'}) %> 
         <div class="order">
             <div class='cart-info'>
                 <span class='order-title'>Łączny koszt:</span>
