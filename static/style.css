@@ -116,9 +116,7 @@ box-name {
 }
 
 /* Kolor 2 części loga */
-span {
-    color: green;
-}
+
 
 /* Wysuwane paski (kategorie i ustawienia) */
 .on {
@@ -243,7 +241,7 @@ buy-box {
     display: inline;
 }
 
-info {
+.cart-info {
     padding-top: .5em;
     padding-left: 1em;
     display: flex;
@@ -251,7 +249,7 @@ info {
     font-size: large;
 }
 
-price {
+.price {
     place-self: left;
 }
 
@@ -335,7 +333,7 @@ empty-cart a {
     margin-top: .5em;
 }
 
-cart {
+.order-cart {
     display: grid;
     
     background-color: white;
@@ -343,7 +341,7 @@ cart {
     border-bottom: 1px solid gray;
 }
 
-cart a {
+item a {
     color: green;
     text-decoration: none;
 }
@@ -375,15 +373,11 @@ item {
 }
 
 .cart-title {
-    padding-left: .5em;
-    display: grid;
-    padding-top: .5em;
-    padding-bottom: .5em;
-    color: darkgray;
-    font-size: larger;
+    padding: .5em;
+    padding-left: 1em;
 }
 
-order {
+.order {
     display: grid;
     background-color: white;
     border-bottom: 1px solid gray;
@@ -391,7 +385,11 @@ order {
 }
 
 .main-cart {
-    padding-top: 0%;
+    padding-top: 0;
+}
+
+.main-order {
+    padding-top: 0;
 }
 
 .cart-info {
@@ -415,6 +413,88 @@ order {
     padding-bottom: .5em;
     margin-top: .5em;
 }
+
+/* Strona zamówienia */
+
+.order-big-title {
+   font-size: 1.4em; 
+   padding-left: .3em;
+}
+
+.order-smaller-title {
+    font-size: 1.2em;
+    padding-left: .3em;
+    margin-bottom: .3em;
+}
+
+.selector {
+    width: 90%;
+    margin-left: 5%;
+    border: black solid 1px;
+    border-radius: 1em;
+    background-color: white;
+    padding: .7em;
+}
+
+.option {
+    border: gray solid 1px;
+    padding: .6em;
+    color: black;
+    font-weight: bold;
+    height: 20px;
+}
+
+.option:checked {
+    border: black solid 1px;
+    background-color: white;
+    color: green;
+}
+
+.order-description {
+    color: gray;
+    font-weight: normal;
+}
+
+.order-data-input {
+    width: 83%;
+    margin-left: 5%;
+    margin-bottom: .7em;
+    border-radius: 1em;
+    border: black solid 1px;
+    padding: .7em;
+}
+
+/* Storna rachunku */
+
+.order-info h3 {
+    margin-top: 1.7em;
+    padding-left: .5em;
+}
+
+
+
+.delivery-info {
+    margin-top: .4em;
+    margin-bottom: .4em;
+    display: grid;
+    border: black solid 1px;
+    border-radius: .3em;
+    padding-left: .5em;
+    padding: .5em;
+    margin: .5em;
+    background-color: white;
+}
+
+.delivery-info h4 {
+    margin-top: .5em;
+    margin-bottom: .5em;
+}
+
+.delivery-info-description {
+    font-weight: bold;
+    color: rgb(26, 26, 26);
+}
+
 
 /* Ustawienia w przeglądarce */
 @media only screen and (min-width: 968px) {
@@ -528,7 +608,12 @@ order {
         place-content: center;
     }
 
-    cart {
+    .main-order {
+        margin-top: 1em;
+        place-content: center;
+    }
+
+    .order-cart {
         width: 45%;
         height: fit-content;
         margin-right: 1em;
@@ -537,12 +622,27 @@ order {
         border-radius: .5em;
     }
 
-    order {
+    .order-info div.order-cart {
+        width: 96%;
+        margin: .5em;
+        margin-right: 1em;
+    }
+
+    .order-info div.order-cart h2 {
+        margin-left: .5em;
+    }
+
+    .order {
         width: 25%;
         height: 140px;
         border: 1px solid gray;
         border-radius: 1em;
         padding: 1em;
+    }
+
+    #final-order {
+        width: auto;
+        border: none;
     }
 
     .cart-info {
@@ -564,6 +664,16 @@ order {
     .main-list {
         display: block;
     }
+
+    /* Ustawienia zamówień */
+    .order-left-side {
+        width: 35%;
+    }
+
+    #final-order-cart {
+        width: 35%;
+    }
+
 }
 
 

@@ -1,0 +1,45 @@
+<%- include('layout-top', {}) %>
+<main class='main-order'>
+    <div class='order-left-side'>
+        <h1 class='order-big-title'>Dostawa i płatność</h1>
+
+        <form method="post">
+            <div class='order-delivery'>
+                <h2 class="order-smaller-title">1. Sposób dostawy</h2>
+                <select class="selector" name="delivery" id="">
+                    <% for (let i of deliveries) { %>
+                        <option class="option" value="<%= i.delivery_id %>"><%= i.delivery_name %> <span class='order-description'>(<%= i.delivery_price ? i.delivery_price/100 + ' zł' : 'bezpłatne' %>)</span></option>
+                    <% } %>
+                </select>
+            </div>
+            
+            <div class='order-payment'>
+                <h2 class="order-smaller-title">2. Metoda płatności</h2>
+                <select class="selector" name="payment" id="">
+                    <% for (let i of payment_methods) { %>
+                        <option class="option" value="<%= i.payment_method_id %>"><%= i.payment_name %> <span class='order-description'>(<%= i.payment_price ? i.payment_price/100 + ' zł' : 'bezpłatne' %>)</span></option>
+                    <% } %>
+                </select>
+            </div>
+            
+            <div class='order-personal-data' style="display: grid;">
+                <h2 class="order-smaller-title">3. Dane odbiorcy</h2>
+                <input class='order-data-input' type="text" name="name" placeholder="Imię i nazwisko lub nazwa firmy" value="<%= locals.name %>">
+                <input class='order-data-input' type="text" name="adress" placeholder="Ulica i numer" value="<%= locals.address %>">
+                <input class='order-data-input' type="text" name="postal_code" placeholder="Kod pocztowy" value="<%= locals.postal_code %>">
+                <input class='order-data-input' type="text" name="city" placeholder="Miejscowośc" value="<%= locals.city %>">
+                <input class='order-data-input' type="email" name="email" placeholder="E-mail" value="<%= locals.email %>">
+                <input class='order-data-input' type="tel" name="tel" placeholder="Telefon" value="<%= locals.tel %>">
+            </div>
+            
+            <button class="order-btn">Złóż zamówienie (placeholder) </button>
+            <span style="color: red;"><%= locals.error_message ? `Wiadomość serwera: ${locals.error_message}` : ''; %></span>
+        </form>
+        </div>
+    </div>
+
+
+    <%- include('cart-module', {cart: locals.cart, cart_count: locals.cart_count, title: 'Koszyk', orderButton: true}) %> 
+    
+</main>
+<%- include('layout-bottom', {}) %>

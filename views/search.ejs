@@ -1,0 +1,34 @@
+<%- include('layout-top', {}) %>
+<main class='main-list'>
+
+    <div class="item-list">
+        <h3>Wyniki wyszukiwania <%= locals.query %>:</h3>
+
+        <form method="get">
+            <select id="orderby" name="orderby" onchange="this.form.submit()">
+            <% for (let i of locals.order_by) { %>
+                <option <%= i.short_name == locals.orderby ? 'selected' : '' %> value="<%= i.short_name %>"><%= i.name %></option>
+            <% } %>
+            <input type="hidden" name="query" value="<%= locals.query %>">
+            </select>
+        </form>
+
+        <all-items>
+        <% if (locals.products.length) { %>
+            <% for (let i of locals.products) { %> 
+                <prod class="product">
+                    <img src="./../img/<%= i.image %>" alt="img" width="231" height="200">
+                    <a href="/product/<%= i.productid %>"><%= i.product_name %></a>
+                    <price><%= i.price/100 %> zł</price>
+                </prod>
+            <% } %>
+        <% } else { %>
+            <%- include('message-module', {static_correction: './..', message: 'Niestety nic nie znaleziono :('}); %>
+        <% } %>
+        
+        </all-items>    
+    </div>
+    
+
+</main>
+<%- include('layout-bottom', {}) %>

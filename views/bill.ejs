@@ -1,0 +1,41 @@
+<%- include('layout-top', {static_correction: './../'}) %>
+<main style="display: grid;">
+
+    <% if (locals.error_message) { %>
+        <%- include('message-module', {message: error_message}) %> 
+    <% } else { %>
+        <h2>Dziękujemy za złożenie zamówienia</h1>
+
+        <div class='order-info'>
+            <div class="order-cart">
+            
+            <h2>Zamówienie</h2>
+
+                <%- include('cart-module', {cart: locals.cart, cart_count: locals.cart_count, title: 'Zamówienie'}) %> 
+        
+                <h3>Dostawa</h3>
+
+                <span class='delivery-info'>Rodzaj dostawy: <%= locals.delivery_name %></span>
+                <div class="delivery-info">
+                    <h4>Dane odbiorcy:</h4>
+                    <span class="delivery-info-description">Imię i nazwisko: <%= locals.name %></span>
+                    <span class="delivery-info-description">Adress email: <%= locals.email %></span>
+                    <span class="delivery-info-description">nr telefonu: <%= locals.tel %></span>
+                </div>
+
+                <div>
+                <h3>Płatność</h3>
+                <span class="delivery-info">Rodzaj płatności: <%= locals.payment_method %></span>
+                <div class="delivery-info">
+                    <h4>Dane do faktury/rachunku:</h4>
+                    <span class="delivery-info-description">Imię i nazwisko: <%= locals.name %></span>
+                    <span class="delivery-info-description">Adress zamieszkania <%= locals.address_line_1 %></span>
+                    <span class="delivery-info-description">Kod pocztowy + Miejscowość: <%= locals.postal_code %> <%= locals.city %></span>
+                </div>
+
+            </div>
+
+        </div>
+    <% } %>
+</main>
+<%- include('layout-bottom', {}) %>

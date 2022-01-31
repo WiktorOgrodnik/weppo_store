@@ -3,7 +3,15 @@ import { rebuiltDatabase, add } from "../../dbconnect.js";
 const initialData = {
     
     statuses: [
-        ['Koszyk']
+        ['Koszyk'],
+        ['Oczekiwanie na płatność'],
+        ['Przygotowywanie'],
+        ['Pakowanie'],
+        ['Oczekiwanie na odbiór'],
+        ['Wysłano'],
+        ['Gotowe do odbioru'],
+        ['Odebrano'],
+        ['Anulowano']
     ],
     categories: [
         ['Laptopy i Komputery'],
@@ -23,6 +31,32 @@ const initialData = {
         [1, 1],
         [2, 2],
         [3, 2]
+    ],
+    tags: [
+        ['telefony']
+    ],
+    tags_products: [
+        [2, 1],
+        [3, 1]
+    ],
+    deliveries: [
+        ['Kurier - InPost, UPS, FedEx, DTS', 2000],
+        ['Paczkomaty 24/7', 900],
+        ['Punkt odbioru - Poczta Polska, Żabka', 890]
+    ],
+    payment_methods: [
+        ['BLIK', 0],
+        ['Karta płatnicza online', 0],
+        ['Płatność online', 3089],
+        ['Przelew gotówkowy', 0],
+        ['Przy odbiorze', 500],
+        ['Raty', 0],
+        ['Leasing', 0]
+    ],
+    roles: [
+        ['Niezalogowany'],
+        ['Klient'],
+        ['Administrator']
     ]
 };
 

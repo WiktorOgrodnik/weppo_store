@@ -29,39 +29,26 @@
 
             const counterAll = document.getElementById('cart-items-count');
             counterAll.innerHTML = +counterAll.innerHTML - 1;
+
+            if (+counterAll.innerHTML == 0) {
+                history.go(0);
+            }
         }
     </script>
 
     <% if (locals.cart.length == 0) { %>
-        <empty-cart>
-            <title class='empty-cart-title'>Twój koszyk jest pusty</title>
-            <title class='empty-cart-description'>Szukasz inspiracji?</title>
-            <a href="/" class='cart-homepage-btn'>Przejdź do strony głównej</a>
-        </empty-cart>
+        <%- include('message-module', {message: 'Twój koszyk jest pusty'}) %> 
     <% } %>
     <% if (locals.cart.length) { %>
-        <cart>
-            <title class='cart-title'>Koszyk (<span id="cart-items-count"><%= locals.cart_count %></span>):</title>
-            <% for (let i of locals.cart) { %>
-                <item id="item-<%= i.product_id %>"> 
-                    <img src="./../img/<%= i.image %>" alt="img" width="72" height="60"> 
-                    <a href="/product/<%= i.product_id %>"><%= i.name %></a>  
-                    <info class='item-info'>
-                        <amount id="item-ammount-<%= i.product_id %>" class='item-ammount'><%= i.ammount %></amount> 
-                        <price class='item-price'><span id="item-price-<%= i.product_id %>"><%= i.price/100 %></span> zł</price>
-                        <button onclick="deleteFromCart('<%= i.product_id %>')">Delete one</button>
-                    </info> 
-                </item>
-            <% } %>
-        </cart>
-        <order>
-            <info class='cart-info'>
-                <title class='order-title'>Łączny koszt:</title>
-                <price><span id="cart-price"><%= locals.cart_value/100 %></span> zł</price>
-            </info>
+        <%- include('cart-module', {cart: locals.cart, cart_count: locals.cart_count, enableDelete: true, title: 'Koszyk'}) %> 
+        <div class="order">
+            <div class='cart-info'>
+                <span class='order-title'>Łączny koszt:</span>
+                <span class="price"><span id="cart-price"><%= locals.cart_value/100 %></span> zł</span>
+            </div>
 
-            <button class='order-btn'>Przejdź do dostawy</button>
-        </order>
+            <button class='order-btn' onclick="window.location.href = '/order'">Przejdź do dostawy</button>
+        </div>
     <% } %>
 </main>
 <%- include('layout-bottom', {}) %>
