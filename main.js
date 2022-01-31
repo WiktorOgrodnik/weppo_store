@@ -39,7 +39,7 @@ app.get('/order', (req, res) => {
     (async () => {
         const data = await orderFormModule(req.cookies.cart_id);
 
-        if (data.cart.cart_count == 0) res.redirect('/cart');
+        if (data.cart_count == 0) res.redirect('/cart');
         else res.render('order', data);
     })();
 });
