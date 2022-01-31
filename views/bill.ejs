@@ -1,9 +1,11 @@
 <%- include('layout-top', {static_correction: './../'}) %>
-<main style="display: grid;">
+<main class="main-cart">
 
     <% if (locals.error_message) { %>
         <%- include('message-module', {message: error_message}) %> 
     <% } else { %>
+    
+    <div style="display: flex;">
         <h2>Dziękujemy za złożenie zamówienia</h1>
 
         <div class='order-info'>
@@ -36,6 +38,7 @@
             </div>
 
         </div>
+    </div>
     <% } %>
 </main>
 <%- include('layout-bottom', {}) %>
