@@ -1,0 +1,60 @@
+<%- include('layout-top', {static_correction: './../'}) %>
+<main style="display: grid; padding-left: .5em; padding-right: .5em;">
+    <h2>Konto</h1>
+
+    <h3 class="header-acc">Dane Konta</h2>
+
+    <h4 class="header-acc">Twoje dane</h3>
+    <div class="acc-info">
+        <span>Imię i nazwisko</span>
+        <span>tel. 892 158 975</span>
+    </div>
+
+    <h4 class="header-acc">Adres e-mail</h3>
+    <div class="acc-info">
+        <span>e-mail</span>
+    </div>
+
+    <h4 class="header-acc">Hasło</h3>
+    <div class="acc-info">
+        <span>••••••••••</span>
+    </div>
+
+    <h4 class="header-acc">Usuwanie konta</h3>
+    
+    <span style="font-size: .9em; margin-bottom: 1em; color: rgb(77, 77, 77);">Jeśli klikniesz w ten przycisk, usuniesz swoje konto w naszym sklepie. Upewnij się, że na pewno chcesz to zrobić – Twojego konta nie będziemy mogli przywrócić.</span>
+
+    <button class="del-acc" id="del-btn">Usuń konto</button>
+
+    <del-pop-up class="off">
+        <div class="header-del-pop-up">
+            <h3>Usuwanie konta</h3>
+            <img id="del-close-btn" class="del-acc-close"  src="https://img.icons8.com/windows/32/000000/delete-sign.png" alt="Close Nav">
+        </div>
+
+        <span style="font-size: .9em; color: rgb(77, 77, 77);">Czy na pewno chcesz usunąć konto?</span>
+
+        <div style="margin-top: 1em;">
+            <button class="del-acc-final">Usuń konto</button>
+        </div>
+    </del-pop-up>
+
+    <script>
+        const delBtn = document.getElementById('del-btn');
+        const acc_del = document.querySelector('del-pop-up')
+
+        const closeBtn = document.getElementById('del-close-btn');
+
+        delBtn.addEventListener('click', () => {
+            acc_del.classList.replace('off', 'del-pop-up');
+        })
+
+        closeBtn.addEventListener('click', () => {
+            acc_del.classList.replace('del-pop-up', 'off')
+        })
+
+
+
+    </script>
+</main>
+<%- include('layout-bottom', {}) %>

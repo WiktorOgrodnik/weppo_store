@@ -248,6 +248,13 @@ app.get('/purchase_history', (req, res) => {
     })();
 });
 
+app.get('/logged_acc', (req, res) => {
+    (async () => {
+        const categories = await (get('categories'))();
+        res.render('logged_acc', {categories: categories.rows});
+    })();
+});
+
 app.listen(port, () => {
     console.log(`Weppo-store listening at port ${port}`);
 });

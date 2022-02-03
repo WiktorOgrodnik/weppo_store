@@ -494,12 +494,69 @@ item {
 
 .delivery-info-description {
     font-weight: bold;
-    color: rgb(26, 26, 26);
+    color: rgb(77, 77, 77);
 }
 
 .message {
     place-self: center ;
 }
+
+/* Ustawienia strony konta */
+.acc-info {
+    padding: .5em;
+    border: black solid 1px;
+    border-radius: .3em;
+    display: grid;
+    background-color: white;
+}
+
+.header-acc {
+    margin-bottom: .3em;
+    font-size: 1.1em;
+}
+
+.del-acc {
+    border-radius: 3em;
+    height: 40px;
+    width: fit-content;
+    padding-left: 3em;
+    padding-right: 3em;
+    background-color: green;
+    border-style: none;
+}
+
+.del-acc-final {
+    border-radius: 3em;
+    height: 40px;
+    width: fit-content;
+    padding-left: 2em;
+    padding-right: 2em;
+    background-color: red;
+    color: white;
+    border-style: none;
+    font-weight: bolder;
+}
+
+.del-pop-up {
+    background-color: white;
+    position: fixed;
+    z-index: 999;
+    border: black solid 1px;
+    border-radius: 1em;
+    padding: 1em;
+    margin-right: .5em;
+}
+
+.del-acc-close {
+    width: 30px;
+    height: 30px;
+}
+
+.header-del-pop-up {
+    display: flex;
+    place-content: space-between;
+}
+
 
 
 /* Ustawienia w przeglądarce */
