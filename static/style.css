@@ -545,6 +545,7 @@ item {
     border-radius: 1em;
     padding: 1em;
     margin-right: .5em;
+    place-self: center;
 }
 
 .del-acc-close {
@@ -603,6 +604,16 @@ item {
     border-radius: 1em;
     padding: .7em;
     width: 90%;
+}
+
+.edit-on-form {
+    display: grid;
+}
+
+.main-account {
+    display: grid;
+    padding-left: .5em;
+    padding-right: .5em;
 }
 
 /* Ustawienia w przeglądarce */
@@ -781,6 +792,21 @@ item {
 
     #final-order-cart {
         width: 35%;
+    }
+
+    /* Strona konta */
+
+    .main-account {
+        width: 50%;
+    }
+
+    .editor-on {
+        border: black solid 1px;
+        border-radius: 1em;
+        top: auto;
+        left: auto;
+        width: 49%;
+        height: 64%;
     }
 
 }
