@@ -1,11 +1,14 @@
 'use strict';
 
 import express from 'express';
-import { add, get, getWithCondition, search, update } from './dbconnect.js';
+import { add, get, getWithCondition, search, secret, update } from './dbconnect.js';
 import cookieParser from 'cookie-parser';
+import session from 'express-session';
+import bcrypt from 'bcryptjs/dist/bcrypt.js';
 import { initApi } from './api.js';
-import { cartModule, orderFormModule } from './modules.js'
+import { cartModule, getUsersCartId, orderFormModule } from './modules.js'
 import { validators } from './validators.js';
+import { authorize } from './authorize.js';
 
 Object.prototype.isEmpty = function () {
     return Object.keys(this).length == 0;
@@ -17,9 +20,16 @@ const port = process.env.PORT || 3000;
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
+app.use(session({
+    secret: secret,
+    resave: true,
+    saveUninitialized: true
+}));
+
 app.use(express.static('./static'));
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
+app.use(express.json());
 
 initApi(app);
 
@@ -37,10 +47,22 @@ app.get('/', (req, res) => {
 
 app.get('/order', (req, res) => {
     (async () => {
-        const data = await orderFormModule(req.cookies.cart_id);
+        const cart_id = req.cookies.cart_id;
+        const user_id = req.session.user_id;
+        const data = await orderFormModule(cart_id, user_id);
+        let email = '';
+        let tel = '';
+
+        if (user_id) {
+            const perdata = await (getWithCondition('users'))([user_id]);
+            if (perdata?.rows?.length > 0) {
+                email = perdata.rows[0].email;
+                tel = perdata.rows[0].tel;
+            }
+        }
 
         if (data.cart_count == 0) res.redirect('/cart');
-        else res.render('order', data);
+        else res.render('order', Object.assign(data, {email: email, tel: tel}));
     })();
 });
 
@@ -85,7 +107,7 @@ app.post('/order', (req, res) => {
                 tel: tel
             }
 
-            const data = await orderFormModule(req.cookies.cart_id);
+            const data = await orderFormModule(req.cookies.cart_id, req.session.user_id);
 
             res.render('order', Object.assign(data, oldData, {error_message: error_message}));
         } else {
@@ -93,13 +115,24 @@ app.post('/order', (req, res) => {
             /*Validation completed*/
             const adress_id = await (add('addresses')([address_line_1, address_line_2, country, postal_code, city]));
             const perdata_id = await (add('personal_data')([name, pesel, nip, regon, adress_id.rows[0].adress_id]));
-            const user_id = await (add('users')([email, tel, 'none', 0, 0, null, null]));
-            await (add('users_roles')([user_id.rows[0].user_id, 1]));
+            
+            let user_id;
+            let cart_id = req.cookies.cart_id;
 
-            const cart = await (getWithCondition('orders')([req.cookies.cart_id]));
+            if (!req.session.user_id) {
+                user_id = await (add('users')([email, tel, 'none', 0, 0, null, null]));
+                await (add('users_roles')([user_id.rows[0].user_id, 1]));
+                user_id = user_id.rows[0].user_id;
+            } else {
+                user_id = req.session.user_id;
+                cart_id = await getUsersCartId(user_id);
+            }
+            
+            const cart = await (getWithCondition('orders')([cart_id]));
+            console.log(cart);
             const order = cart.rows[0];
 
-            order.user_id = user_id.rows[0].user_id;
+            order.user_id = user_id;
             order.perdata_id = perdata_id.rows[0].perdata_id;
             order.order_date = Date.now();
             order.delivery_id = delivery_id;
@@ -108,11 +141,11 @@ app.post('/order', (req, res) => {
             
             const payment_price = await (getWithCondition('payment_methods')([payment_id]));
             const delivery_price = await (getWithCondition('deliveries')([delivery_id]));
-            const cart_price = (await cartModule(req.cookies.cart_id, 'cart')).cart_value;
+            const cart_price = (await cartModule(req.cookies.cart_id, req.session.user_id, 'cart')).cart_value;
 
             order.price = cart_price + payment_price.rows[0].payment_price + delivery_price.rows[0].delivery_price;
 
-            await update('orders')([req.cookies.cart_id, order.user_id, order.perdata_id, order.other_address_id, order.order_date, order.end_date, order.delivery_id, order.payment_id, order.is_paid, order.status_id, order.price]);
+            await update('orders')([cart_id, order.user_id, order.perdata_id, order.other_address_id, order.order_date, order.end_date, order.delivery_id, order.payment_id, order.is_paid, order.status_id, order.price]);
 
             res.clearCookie('cart_id');
             res.redirect(`/orders/${order.order_id}`);
@@ -124,7 +157,7 @@ app.post('/order', (req, res) => {
 app.get('/orders/:id', (req, res) => {
     (async () => {
         const categories = await (get('categories'))();
-        const cart = await cartModule(req.params.id, 'order');
+        const cart = await cartModule(req.params.id, req.session.user_id, 'order');
         const order = await (getWithCondition('orders2'))([req.params.id]);
 
         if (order?.rows?.length) {
@@ -173,7 +206,7 @@ app.get('/cart', (req, res) => {
     (async () => {
 
         const categories = await (get('categories'))();
-        const cart = await cartModule(req.cookies.cart_id, 'cart');
+        const cart = await cartModule(req.cookies.cart_id, req.session.user_id, 'cart');
 
         res.render('cart', Object.assign({categories: categories.rows}, cart));
     })();
@@ -220,17 +253,144 @@ app.get('/search', (req, res) => {
  * Other
  */
 
-app.get('/settings', (req, res) => {
+app.get('/settings', authorize(3), (req, res) => {
     (async () => {
         const categories = await (get('categories'))();
         res.render('settings', {categories: categories.rows});
     })();
 }); 
 
-app.get('/account', (req, res) => {
+app.get('/account', authorize(2, 3), (req, res) => {
     (async () => {
         const categories = await (get('categories'))();
         res.render('account', {categories: categories.rows});
+    })();
+});
+
+app.get('/login', authorize(1), (req, res) => {
+    (async () => {
+        const categories = await (get('categories'))();
+        res.render('login', {categories: categories.rows, returnUrl: req.query.returnUrl});
+    })();
+});
+
+app.post('/login', authorize(1), (req, res) => {
+    const email = req.body.email;
+    const passwd = req.body.password;
+    const returnUrl = req.body.returnUrl ?? '/';
+    if (email && passwd) {
+        (async () => {
+            bcrypt.compareSync("B4c0/\/", passwd);
+            const user = await (getWithCondition('users_login'))([email]);
+            if (user.rows?.length > 0 && bcrypt.compareSync(passwd, user.rows[0].passwd)) {
+                req.session.loggedin = true;
+                req.session.user_id = user.rows[0].user_id;
+
+                await (update('login_time'))([req.session.user_id, Date.now()]);
+                if (req.cookies.cart_id && !(await getUsersCartId(req.session.user_id))) {
+                    await (update('add_cart_to_user'))([req.cookies.cart_id, req.session.user_id]);
+                }
+
+                res.clearCookie('cart_id');
+
+                res.redirect(returnUrl);
+            } else {
+                (async () => {
+                    const categories = await (get('categories'))();
+                    res.render('login', {categories: categories.rows, returnUrl: returnUrl, serverMessage: 'Email lub hasło są nieprawidłowe!'});
+                })();
+            }
+        })();
+    } else {
+        (async () => {
+            const categories = await (get('categories'))();
+            res.render('login', {categories: categories.rows, returnUrl: returnUrl, serverMessage: 'Wypełnij e-mail i hasło!'});
+        })();
+    }
+});
+
+app.get('/logout', (req, res) => {
+    req.session.loggedin = false;
+    req.session.user_id = 0;
+    res.redirect('/');
+});
+
+app.post('/register', (req, res) => {
+
+    (async () => {
+        const email = req.body.email;
+        const passwd = req.body.passwd;
+        const passwd2 = req.body.passwd2;
+        const tel = req.body.tel;
+
+        let valid = true;
+        let message = 'ok';
+
+        const emails = await (getWithCondition('email_register'))([email]);
+        if (emails?.rows.length > 0) {
+            valid = false;
+            message = 'Ten email jest już zajęty';
+        }
+
+        const telephones = await (getWithCondition('tel_register'))([tel]);
+        if (telephones?.rows.length > 0) {
+            valid = false;
+            message = 'Ten nr telefonu jest już zajęty';
+        }
+
+        if (passwd !== passwd2) {
+            valid = false;
+            message = 'Podane hasła nie są identyczne';
+        }
+
+        if (!validators.validatePassword(passwd)) {
+            valid = false;
+            message = 'Hasło musi mieć: co najmniej 12 znaków i zawierać: małe litery, duże litery, cyfry';
+        }
+
+        if (!validators.validateTelephone(tel)) {
+            valid = false;
+            message = 'Nr telefonu nie jest poprawny!';
+        }
+
+        if (!validators.validateEmail(email)) {
+            valid = false;
+            message = 'Email nie jest poprawny!';
+        }
+
+        if (valid) {
+            const salt = bcrypt.genSaltSync(10);
+            const hash = bcrypt.hashSync(passwd, salt);
+
+            const user_inserted = await (add('users')([email, tel, hash, 1, 1, null, null]));
+            if (user_inserted?.rows?.length > 0) {
+                const user_id = user_inserted.rows[0].user_id;
+                await (add('users_roles')([user_id, 2])); //normal user permissions
+                
+                req.session.registered = true;
+
+                res.redirect('/registration-successful');
+            } else {
+                console.error('Something went wrong!');
+                res.end('Something went wrong!')
+            }
+        } else {
+            const categories = await (get('categories'))();
+            res.render('login', {categories: categories.rows, serverMessageReg: message, regemail: email, regtel: tel});
+        }
+    })();
+    
+});
+
+app.get('/registration-successful', (req, res) => {
+    (async () => {
+        if (req.session.registered) {
+            req.session.registered = false;
+            const categories = await (get('categories'))();
+            res.render('registration_successful', {categories: categories.rows});
+        } else {
+            res.redirect('/');
+        }
     })();
 });
 
@@ -241,10 +401,17 @@ app.get('/contact', (req, res) => {
     })();
 });
 
-app.get('/purchase_history', (req, res) => {
+app.get('/purchase_history', authorize(2, 3), (req, res) => {
     (async () => {
         const categories = await (get('categories'))();
         res.render('purchase_history', {categories: categories.rows});
+    })();
+});
+
+app.get('/more-permissions-needed', (req, res) => {
+    (async () => {
+        const categories = await (get('categories'))();
+        res.render('more_permissions_needed', {categories: categories.rows});
     })();
 });
 
