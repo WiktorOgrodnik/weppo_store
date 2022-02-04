@@ -497,6 +497,10 @@ item {
     color: rgb(77, 77, 77);
 }
 
+.error-message {
+    width: 200px;
+}
+
 .message {
     place-self: center ;
 }

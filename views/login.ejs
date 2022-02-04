@@ -10,7 +10,7 @@
             <input class="form-input" type="password" name="password" id="password">
             <input type="hidden" value="<%= locals.returnUrl %>" name="returnurl">
             <button class="login-btn">Zaloguj się</button>
-            <span style="color: red;"><%= locals.serverMessage %></span>
+            <span class="error-message" style="color: red;"><%= locals.serverMessage %></span>
         </div>
     </form>
     
@@ -26,7 +26,7 @@
             <box-name>Powtórz hasło</box-name>
             <input class="form-input" type="password" name="passwd2" id="passwd2">
             <button class="register-btn">Załóż konto</button>
-            <span style="color: red;"><%= locals.serverMessageReg %></span>
+            <span class="error-message" style="color: red;"><%= locals.serverMessageReg %></span>
         </div>
     </form>
 </main>
