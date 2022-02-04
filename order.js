@@ -1,5 +1,5 @@
 'use strict';
-import { add, getWithCondition, update } from './dbconnect.js';
+import { add, getWithCondition, update, deleted } from './dbconnect.js';
 import { ApiException } from './exceptions.js';
 
 export class Order {
@@ -62,6 +62,57 @@ export class Order {
             }
         } catch (error) {
             error.message = `Can not load order (addtToOrder): ${error.status_id}`;
+            throw error;
+        }
+    }
+
+    static async deleteFromOrder(order_id, product_id, ammount) {
+        try {
+            const order = await this.load(order_id);
+            if (order.status_id > 1) throw new ApiException('This is not a cart!');
+
+            try {
+                const products_orders = await (getWithCondition('products_orders3'))([order_id, product_id])
+                if (products_orders?.rows?.length > 0) {
+                    try {
+                        if (products_orders.rows[0].ammount > ammount) {
+                            await (update('products_orders'))([order_id, product_id, products_orders.rows[0].ammount - ammount, products_orders.rows[0].price]);
+                            return 'less';
+                        } else {
+                            await (deleted('products_orders'))([order_id, product_id]);
+    
+                            try {
+                                cart = await (getWithCondition('products_orders2'))([cart_id]);
+                                if (!cart?.rows?.length) {
+                                    try {
+                                        console.log('nonenone');
+                                        await (deleted('orders'))([order_id]);
+                                        return 'nonenone';
+                                    } catch {
+                                        error.message = `Can not delete products_order (deleteFromOrder): ${error.status_id}`;
+                                        throw error;
+                                    }
+                                } else {
+                                    return 'none';
+                                }
+                            } catch {
+                                error.message = `Can not load products_order (deleteFromOrder): ${error.status_id}`;
+                                throw error;
+                            }
+                        }
+                    } catch (error) {
+                        error.message = `Can not update products_order (deleteFromOrder): ${error.status_id}`;
+                        throw error;
+                    }
+                } else {
+                    throw new ApiException('Nothing to delete!');
+                }
+            } catch (error) {
+                error.message = `Can not load products_order (deleteFromOrder): ${error.status_id}`;
+                throw error;
+            }
+        } catch (error) {
+            error.message = `Can not load order (deleteFromOrder): ${error.status_id}`;
             throw error;
         }
     }

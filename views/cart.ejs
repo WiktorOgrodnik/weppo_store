@@ -14,6 +14,7 @@
             console.log(response.ok);
 
             const whatNext = await response.text();
+            console.log(whatNext);
 
             const itemPrice = document.getElementById(`item-price-${id}`);
             const cartPrice = document.getElementById('cart-price');

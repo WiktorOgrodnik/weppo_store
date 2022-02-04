@@ -48,8 +48,6 @@ export async function addToCart(cart_id, user_id, product_id, ammount) {
         try {
             cart_id = await order.add();
             cart_id = cart_id.rows[0].order_id;
-
-            (update)
         } catch (error) {
             error.message = `Can not add new cart: ${error.message};`;
             throw error;
@@ -67,20 +65,18 @@ export async function addToCart(cart_id, user_id, product_id, ammount) {
 
 export async function deleteFromCart(cart_id, user_id, product_id, ammount) {
     if (user_id) cart_id = await getUsersCartId(user_id);
+    let status = 'less';
 
-    if (!cart_id) {
+    if (cart_id) {
         try {
-            cart_id = await order.add();
-            cart_id = cart_id.rows[0].order_id;
-
-            await Order.addToOrder(cart_id, product_id, ammount);
+            status = await Order.deleteFromOrder(cart_id, product_id, ammount);
         } catch (error) {
-            error.message = `Can not add new cart: ${error.message};`;
+            error.message = `Can not delete from cart: ${error.message};`;
             throw error;
         }
     }
 
-    return cart_id;
+    return status;
 }
 
 export async function orderFormModule(cart_id, user_id) {

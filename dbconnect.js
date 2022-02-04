@@ -324,7 +324,8 @@ export function update(table) {
 
 const deleteQuery = {
     products_orders: `DELETE FROM products_orders
-    WHERE order_id=$1 AND product_id=$2;`
+    WHERE order_id=$1 AND product_id=$2;`,
+    orders: `DELETE FROM orders WHERE order_id=$1;`
 }
 
 export function deleted(table) {

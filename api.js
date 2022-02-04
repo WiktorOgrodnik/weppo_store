@@ -1,6 +1,6 @@
 import { get, getWithCondition, update, deleted } from './dbconnect.js';
 import { ApiException } from './exceptions.js';
-import { addToCart, getUsersCartId } from './modules.js';
+import { addToCart, deleteFromCart, getUsersCartId } from './modules.js';
 
 export function initApi(app) {
 
@@ -44,23 +44,25 @@ export function initApi(app) {
         (async () => {
             const product_id = req.params.id;
             const ammount = req.params.ammount;
-            let order_id = req.cookies.cart_id;
-            let response = 'less';
+            const user_id = req.session.user_id;
+            let cart_id = req.cookies.cart_id;
+            let response = 'less'; 
 
-            if (req.session.loggedin) {
-                order_id = await getUsersCartId(req.session.user_id);
-            }
-    
-            if (order_id) {
-                const product_order = await (getWithCondition('products_orders3'))([order_id, product_id]);
-    
-                if (product_order.rows.length && product_order.rows[0].ammount > ammount) {
-                    (update('products_orders'))([order_id, product_id, product_order.rows[0].ammount - ammount, product_order.rows[0].price]);
-                } else if (product_order.rows.length && product_order.rows[0].ammount == ammount) {
-                    (deleted('products_orders'))([order_id, product_id]);
+            try {
+                response = await deleteFromCart(cart_id, user_id, product_id, ammount);
+            } catch (error) {
+                if (error instanceof ApiException) {
+                    response = error.message;
+                } else {
+                    console.error (`Podczas usuwania artykułów z koszyka wystapił błąd: ${error.message}, zapytanie: ${error.query}`);
+                    response = 'Problems with loading data';
+                }
+            } finally {
+                if (response == 'nonenone') {
+                    res.clearCookie('cart_id');
                     response = 'none';
                 }
-            } 
+            }
     
             res.setHeader('Content-type', 'text/plain; charset=utf8;');
             res.end(response);
