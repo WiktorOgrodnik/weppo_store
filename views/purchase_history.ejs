@@ -1,13 +1,21 @@
 <%- include('layout-top', {}) %>
-<main>
+<main class="main-purchase-history">
     <h1>Historia Zamówień</h1>
 
     <div class="history-box">
-        <div class="single-order">
+    <% for (let i of orders) { %>
+        <a href='../orders/<%= i.order_id %>' class="single-order">
+            <div class="order-info">
+                <span class="order-header">Status</span>
+                <span>data zamówienia</span>
+                <span>numer zamówienia</span>
+                <span>łączny koszt zł</span>
+            </div>
+            <div class="order-pictures">
 
-        </div>
-
-        
+            </div>
+        </a>
+    <% } %>
     </div>
 </main>
 <%- include('layout-bottom', {}) %>

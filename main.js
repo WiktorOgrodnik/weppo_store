@@ -156,8 +156,11 @@ app.post('/order', (req, res) => {
 // Need some try-catch
 app.get('/orders/:id', (req, res) => {
     (async () => {
+
+        let cart_id = req.params.id;
+
         const categories = await (get('categories'))();
-        const cart = await cartModule(req.params.id, req.session.user_id, 'order');
+        const cart = await cartModule(req.params.id, null, 'order');
         const order = await (getWithCondition('orders2'))([req.params.id]);
 
         if (order?.rows?.length) {
@@ -179,8 +182,13 @@ app.get('/orders/:id', (req, res) => {
                     city: address.rows[0].city
                 }
 
-                res.render('bill', Object.assign({categories: categories.rows}, cart, data));
+                const users_roles = await (getWithCondition('users_roles'))([user.rows[0].user_id]);
 
+                if (users_roles.rows[0].role_id > 1 && user.rows[0].user_id !== req.session.user_id) {
+                    res.render('bill', {categories: categories.rows, error_message: 'Nie ma takiego zamówienia, sprawdź czy numer zamówienia jest prawidłowy'});
+                } else {
+                    res.render('bill', Object.assign({categories: categories.rows}, cart, data));
+                }
             } else {
                 res.render('bill', {categories: categories.rows, error_message: 'Nieoczekiwany błąd serwera'});
             }
@@ -404,7 +412,25 @@ app.get('/contact', (req, res) => {
 app.get('/purchase_history', authorize(2, 3), (req, res) => {
     (async () => {
         const categories = await (get('categories'))();
-        res.render('purchase_history', {categories: categories.rows});
+
+        const orders = await (getWithCondition('orders4'))([req.session.user_id]);
+
+        const carts = [];
+        const pictures = [];
+
+        for (let index = 0; index < orders.rows.length; index++) {
+            carts.push(await (cartModule(orders.rows[index].order_id,null,'order')))
+        }
+
+        for(let k of carts) {
+            pictures.push(k.cart.map(l => l.image));
+        }
+
+        for (let k of pictures) {
+            console.log(k);
+        }
+
+        res.render('purchase_history', {categories: categories.rows, orders: orders.rows});
     })();
 });
 

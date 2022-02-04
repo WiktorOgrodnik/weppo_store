@@ -1,4 +1,6 @@
 import Pool from 'pg/lib/client.js';
+import { PoolException } from './exceptions.js';
+
 const env = process.env.DB_ENVIRONMENT || "development";
 
 const db_data = {
@@ -225,7 +227,8 @@ const getQuery = {
     categories_products: 'SELECT * FROM categories_products;',
     orders: 'SELECT * FROM orders;',
     deliveries: 'SELECT * FROM deliveries;',
-    payment_methods: 'SELECT * FROM payment_methods;'
+    payment_methods: 'SELECT * FROM payment_methods;',
+    statuses: 'SELECT * FROM statuses;'
 }
 
 const getQueryWithCondition = {
