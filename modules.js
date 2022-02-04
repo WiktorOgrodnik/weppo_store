@@ -1,4 +1,4 @@
-import { get, getWithCondition } from './dbconnect.js';
+import { get, getWithCondition, update } from './dbconnect.js';
 import { Order } from './order.js';
 
 export async function getUsersCartId(user_id) {
@@ -41,14 +41,15 @@ export async function cartModule(cart_id, user_id, type) {
 
 export async function addToCart(cart_id, user_id, product_id, ammount) {
     if (user_id) cart_id = await getUsersCartId(user_id);
+    else user_id = null;
     
     if (!cart_id) {
-        const order = new Order(null, null, null, null, null, null, null, 0, 1, 0);
+        const order = new Order(user_id, null, null, null, null, null, null, 0, 1, 0);
         try {
             cart_id = await order.add();
             cart_id = cart_id.rows[0].order_id;
 
-            await Order.addToOrder(cart_id, product_id, ammount);
+            (update)
         } catch (error) {
             error.message = `Can not add new cart: ${error.message};`;
             throw error;
@@ -60,6 +61,24 @@ export async function addToCart(cart_id, user_id, product_id, ammount) {
     } catch (error) {
         throw error;
     } 
+
+    return cart_id;
+}
+
+export async function deleteFromCart(cart_id, user_id, product_id, ammount) {
+    if (user_id) cart_id = await getUsersCartId(user_id);
+
+    if (!cart_id) {
+        try {
+            cart_id = await order.add();
+            cart_id = cart_id.rows[0].order_id;
+
+            await Order.addToOrder(cart_id, product_id, ammount);
+        } catch (error) {
+            error.message = `Can not add new cart: ${error.message};`;
+            throw error;
+        }
+    }
 
     return cart_id;
 }

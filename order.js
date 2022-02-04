@@ -19,7 +19,7 @@ export class Order {
 
     async add() {
         try {
-            return (add('orders'))(Object.keys(this).map(k => this[k]).slice(1));
+            return await (add('orders'))(Object.keys(this).map(k => this[k]).slice(1));
         } catch (error) {
             error.message = `Order.add(): ${error.message}`;
             throw error;
