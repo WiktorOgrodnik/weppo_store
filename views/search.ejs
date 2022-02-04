@@ -5,7 +5,7 @@
         <h3>Wyniki wyszukiwania <%= locals.query %>:</h3>
 
         <form method="get">
-            <select id="orderby" name="orderby" onchange="this.form.submit()">
+            <select class="search-selector" id="orderby" name="orderby" onchange="this.form.submit()">
             <% for (let i of locals.order_by) { %>
                 <option <%= i.short_name == locals.orderby ? 'selected' : '' %> value="<%= i.short_name %>"><%= i.name %></option>
             <% } %>

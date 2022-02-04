@@ -557,6 +557,13 @@ item {
     place-content: space-between;
 }
 
+.search-selector {
+    margin-left: .5em;
+    border: black solid 1px;
+    border-radius: 1em;
+    background-color: white;
+    padding: .6em;
+}
 
 
 /* Ustawienia w przeglądarce */
