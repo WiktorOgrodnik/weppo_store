@@ -1,10 +1,108 @@
 <%- include('layout-top', {}) %>
 <main>
-    To jest konto.<br><br>
-
-    Linki:<br>
-    <a href="/">Strona główna</a><br>
-    <a href="/logout">Wyloguj się</a><br>
-    <a href="/settings">Ustawienia administratora (placholder)</a><br>
+    <main style="display: grid; padding-left: .5em; padding-right: .5em;">
+        <h2>Konto</h1>
+    
+        <h3 class="header-acc">Dane Konta</h2>
+    
+        <h4 class="header-acc">Twoje dane</h3>
+        <div class="acc-info">
+            <div style="display:flex; place-content: space-between;"><span>Imię i nazwisko</span> <img id="personal-info-edit" height="16" width="16" src="https://img.icons8.com/small/16/000000/edit.png"/></div>
+            <span>tel. 892 158 975</span>
+        </div>
+    
+        <h4 class="header-acc">Adres e-mail</h3>
+        <div class="acc-info">
+            <div style="display:flex; place-content: space-between;"><span>e-mail</span> <img id="e-mail-edit" height="16" width="16" src="https://img.icons8.com/small/16/000000/edit.png"/></div>
+        </div>
+    
+        <h4 class="header-acc">Hasło</h3>
+        <div class="acc-info">
+            <div style="display:flex; place-content: space-between;"><span>••••••••••</span> <img id="password-edit" height="16" width="16" src="https://img.icons8.com/small/16/000000/edit.png"/></div>
+            
+        </div>
+    
+        <h4 class="header-acc">Usuwanie konta</h3>
+        
+        <span style="font-size: .9em; margin-bottom: 1em; color: rgb(77, 77, 77);">Jeśli klikniesz w ten przycisk, usuniesz swoje konto w naszym sklepie. Upewnij się, że na pewno chcesz to zrobić – Twojego konta nie będziemy mogli przywrócić.</span>
+    
+        <button class="del-acc" id="del-btn">Usuń konto</button>
+    
+        <del-pop-up class="off">
+            <div class="header-del-pop-up">
+                <h3>Usuwanie konta</h3>
+                <img id="del-close-btn" class="del-acc-close"  src="https://img.icons8.com/windows/32/000000/delete-sign.png" alt="Close Nav">
+            </div>
+    
+            <span style="font-size: .9em; color: rgb(77, 77, 77);">Czy na pewno chcesz usunąć konto?</span>
+    
+            <div style="margin-top: 1em;">
+                <button class="del-acc-final">Usuń konto</button>
+            </div>
+        </del-pop-up>
+    
+        <editor class="off">
+    
+            <personal-edit class="off">
+                <form action="">
+                    <!--  -->
+                </form>
+            </personal-edit>
+    
+            <password-edit class="off">
+                <form action="">
+                    <!--  -->
+                </form>
+            </password-edit>
+    
+            <email-edit class="off">
+                <form action="">
+                    <!--  -->
+                </form>
+            </email-edit>
+        
+        </editor>
+    
+        <script>
+            const delBtn = document.getElementById('del-btn');
+            const acc_del = document.querySelector('del-pop-up');
+            const closeBtn = document.getElementById('del-close-btn');
+    
+            const editPassBtn = document.getElementById('password-edit');
+            const editEmailBtn = document.getElementById('e-mail-edit');
+            const editPersonalInfoBtn = document.getElementById('personal-info-edit');
+    
+            const editor = document.querySelector('editor');
+            const personal_edit = document.querySelector('personal-edit');
+            const password_edit = document.querySelector('password-edit');
+            const email_edit = document.querySelector('email-edit');
+    
+    
+            delBtn.addEventListener('click', () => {
+                acc_del.classList.replace('off', 'del-pop-up');
+            })
+    
+            closeBtn.addEventListener('click', () => {
+                acc_del.classList.replace('del-pop-up', 'off')
+            })
+    
+            editPassBtn.addEventListener('click', () => {
+                editor.classList.replace('off', 'editor-on');
+                password_edit.classList.replace('off', 'edit-on');
+            })
+    
+            editEmailBtn.addEventListener('click', () => {
+                editor.classList.replace('off', 'editor-on');
+                email_edit.classList.replace('off', 'edit-on');
+            })
+    
+            editPersonalInfoBtn.addEventListener('click', () => {
+                editor.classList.replace('off', 'editor-on');
+                personal_edit.classList.replace('off', 'edit-on');
+            })
+    
+    
+        </script>
+    </main>
 </main>
 <%- include('layout-bottom', {}) %>

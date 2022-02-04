@@ -13,8 +13,8 @@
             </select>
         </form>
 
-        <all-items>
         <% if (locals.products.length) { %>
+        <all-items>
             <% for (let i of locals.products) { %> 
                 <prod class="product">
                     <img src="./../img/<%= i.image %>" alt="img" width="231" height="200">
@@ -22,11 +22,11 @@
                     <price><%= i.price/100 %> zł</price>
                 </prod>
             <% } %>
+        </all-items>
+        
         <% } else { %>
             <%- include('message-module', {static_correction: './..', message: 'Niestety nic nie znaleziono :('}); %>
         <% } %>
-        
-        </all-items>    
     </div>
     
 
