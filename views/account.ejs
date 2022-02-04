@@ -7,18 +7,18 @@
     
         <h4 class="header-acc">Twoje dane</h3>
         <div class="acc-info">
-            <div style="display:flex; place-content: space-between;"><span>Imię i nazwisko</span> <img id="personal-info-edit" height="16" width="16" src="https://img.icons8.com/small/16/000000/edit.png"/></div>
+            <div style="display:flex; place-content: space-between;"><span>Imię i nazwisko</span> <img id="personal-info-edit-btn" height="16" width="16" src="https://img.icons8.com/small/16/000000/edit.png"/></div>
             <span>tel. 892 158 975</span>
         </div>
     
         <h4 class="header-acc">Adres e-mail</h3>
         <div class="acc-info">
-            <div style="display:flex; place-content: space-between;"><span>e-mail</span> <img id="e-mail-edit" height="16" width="16" src="https://img.icons8.com/small/16/000000/edit.png"/></div>
+            <div style="display:flex; place-content: space-between;"><span>e-mail</span> <img id="e-mail-edit-btn" height="16" width="16" src="https://img.icons8.com/small/16/000000/edit.png"/></div>
         </div>
     
         <h4 class="header-acc">Hasło</h3>
         <div class="acc-info">
-            <div style="display:flex; place-content: space-between;"><span>••••••••••</span> <img id="password-edit" height="16" width="16" src="https://img.icons8.com/small/16/000000/edit.png"/></div>
+            <div style="display:flex; place-content: space-between;"><span>••••••••••</span> <img id="password-edit-btn" height="16" width="16" src="https://img.icons8.com/small/16/000000/edit.png"/></div>
             
         </div>
     
@@ -44,23 +44,61 @@
         <editor class="off">
     
             <personal-edit class="off">
-                <form action="">
-                    <!--  -->
+                
+                <div class="header-form">
+                    <h3>Twoje dane</h3>
+                    <img id="personal-edit-exit" src="https://img.icons8.com/windows/32/000000/delete-sign.png" alt="">
+                </div>
+
+                <form class="edit-on-form" action="">
+                    <h4 class="header-acc">Imię</h4>
+                    <input class="form-input" type="text">
+                    <h4 class="header-acc">Nazwisko</h4>
+                    <input class="form-input" type="text">
+                    <h4 class="header-acc">Telefon</h4>
+                    <input class="form-input" type="text">
+
+                    <button class="form-save-btn">Zapisz</button>
                 </form>
+            
             </personal-edit>
     
-            <password-edit class="off">
-                <form action="">
-                    <!--  -->
-                </form>
-            </password-edit>
-    
             <email-edit class="off">
-                <form action="">
-                    <!--  -->
+                
+                <div class="header-form">
+                    <h3>Zmiana e-maila</h3>
+                    <img id="email-edit-exit" src="https://img.icons8.com/windows/32/000000/delete-sign.png" alt="">
+                </div>
+
+                <form class="edit-on-form" action="">
+                    <h4 class="header-acc">e-mail</h4>
+                    <input class="form-input" type="email" name="" id="">
+
+                    <button class="form-save-btn">Zapisz</button>
                 </form>
+
             </email-edit>
         
+            <password-edit class="off">
+                
+                <div class="header-form">
+                    <h3>Zmiana hasła</h3>
+                    <img id="password-edit-exit" src="https://img.icons8.com/windows/32/000000/delete-sign.png" alt="">
+                </div>
+
+                <form class="edit-on-form" action="">
+                    <h4 class="header-acc">Obecne hasło</h4>
+                    <input class="form-input" type="password" name="" id="">
+                    <h4 class="header-acc">Nowe hasło</h4>
+                    <input class="form-input" type="password" name="" id="">
+                    <h4 class="header-acc">Potwierdź hasło</h4>
+                    <input class="form-input" type="password" name="" id="">
+
+                    <button class="form-save-btn">Zapisz</button>
+                </form>
+
+            </password-edit>
+
         </editor>
     
         <script>
@@ -68,15 +106,18 @@
             const acc_del = document.querySelector('del-pop-up');
             const closeBtn = document.getElementById('del-close-btn');
     
-            const editPassBtn = document.getElementById('password-edit');
-            const editEmailBtn = document.getElementById('e-mail-edit');
-            const editPersonalInfoBtn = document.getElementById('personal-info-edit');
+            const editPassBtn = document.getElementById('password-edit-btn');
+            const editEmailBtn = document.getElementById('e-mail-edit-btn');
+            const editPersonalInfoBtn = document.getElementById('personal-info-edit-btn');
     
             const editor = document.querySelector('editor');
             const personal_edit = document.querySelector('personal-edit');
             const password_edit = document.querySelector('password-edit');
             const email_edit = document.querySelector('email-edit');
     
+            const personal_edit_exit = document.getElementById('personal-edit-exit');
+            const password_edit_exit = document.getElementById('password-edit-exit');
+            const email_edit_exit = document.getElementById('email-edit-exit');
     
             delBtn.addEventListener('click', () => {
                 acc_del.classList.replace('off', 'del-pop-up');
@@ -101,7 +142,22 @@
                 personal_edit.classList.replace('off', 'edit-on');
             })
     
-    
+            personal_edit_exit.addEventListener('click', () => {
+                editor.classList.replace('editor-on', 'off');
+                personal_edit.classList.replace('edit-on', 'off');
+            })
+
+            password_edit_exit.addEventListener('click', () => {
+                editor.classList.replace('editor-on', 'off');
+                password_edit.classList.replace('edit-on', 'off');
+            })
+
+            email_edit_exit.addEventListener('click', () => {
+                editor.classList.replace('editor-on', 'off');
+                email_edit.classList.replace('edit-on', 'off');
+            })
+
+
         </script>
     </main>
 </main>

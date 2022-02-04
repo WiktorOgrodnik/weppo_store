@@ -565,6 +565,45 @@ item {
     padding: .6em;
 }
 
+.edit-on {
+    display: grid;
+    padding: 1em;
+}
+
+.editor-on {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    
+    background-color: white;
+}
+
+.form-save-btn {
+    margin-top: 2em;
+    border-radius: 3em;
+    height: 40px;
+    width: fit-content;
+    padding-left: 3em;
+    padding-right: 3em;
+    background-color: green;
+    border-style: none;
+}
+
+.header-form {
+    display: flex;
+    place-content: space-between;
+}
+
+.form-input {
+    border: black solid 1px;
+    border-radius: 1em;
+    padding: .7em;
+    width: 90%;
+}
 
 /* Ustawienia w przeglądarce */
 @media only screen and (min-width: 968px) {
