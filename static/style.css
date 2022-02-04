@@ -20,7 +20,7 @@ footer {
 }
 
 /* Strona logowania - wersja mobilna */
-login {
+.login {
     background-color: white;
     display: grid;
     height: auto;
@@ -33,7 +33,7 @@ login {
     margin-bottom: 1em;
 }
 
-rejestracja {
+.rejestracja {
     background-color: white;
     display: grid;
     border-radius: 1em;
@@ -745,15 +745,13 @@ item {
         text-align: center;
     }
 
-    login {
+    .login {
         height: fit-content;
-        width: 25%;
         margin-right: 0;
         margin-left: 0;
     }
 
-    rejestracja {
-        width: 25%;
+    .rejestracja {
         margin-right: 0;
         margin-left: 0;
     }
