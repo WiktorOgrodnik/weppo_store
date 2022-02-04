@@ -1,6 +1,5 @@
 import Pool from 'pg/lib/client.js';
 import { PoolException } from './exceptions.js';
-
 const env = process.env.DB_ENVIRONMENT || "development";
 
 const db_data = {
@@ -165,6 +164,7 @@ function queryBuilder(query) {
         try {
             toReturn = await client.query(query, req);
         } catch (err) {
+            console.log(err.stack);
             throw new PoolException(query, err.stack);
         } finally {
             client.end();

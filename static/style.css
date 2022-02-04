@@ -20,7 +20,7 @@ footer {
 }
 
 /* Strona logowania - wersja mobilna */
-login {
+.login {
     background-color: white;
     display: grid;
     height: auto;
@@ -33,7 +33,7 @@ login {
     margin-bottom: 1em;
 }
 
-rejestracja {
+.rejestracja {
     background-color: white;
     display: grid;
     border-radius: 1em;
@@ -497,6 +497,10 @@ item {
     color: rgb(77, 77, 77);
 }
 
+.error-message {
+    width: 200px;
+}
+
 .message {
     place-self: center ;
 }
@@ -616,6 +620,47 @@ item {
     padding-right: .5em;
 }
 
+/* Ustawienia histori zamówień */
+
+.main-purchase-history {
+    display: grid;
+    margin-left: .8em;
+    margin-right: .8em;
+}
+
+.single-order {
+    display: flex;
+    text-decoration: none;
+    color: black;
+    border: black solid 1px;
+    border-radius: 1em;
+    background-color: white;
+    margin-bottom: 1em;
+}
+
+.order-header {
+    font-size: larger;
+}
+
+.order-nr {
+    color: rgb(77, 77, 77);
+    font-size: smaller;
+}
+
+.order-date {
+    color: rgb(29, 29, 29);
+}
+
+.order-info {
+    display: grid;
+    padding: 1em;
+}
+
+.order-pictures {
+    display: none;
+}
+
+
 /* Ustawienia w przeglądarce */
 @media only screen and (min-width: 968px) {
     .mobile-kat, .mobile-menu, .mobile-menu-exit {
@@ -704,15 +749,13 @@ item {
         text-align: center;
     }
 
-    login {
+    .login {
         height: fit-content;
-        width: 25%;
         margin-right: 0;
         margin-left: 0;
     }
 
-    rejestracja {
-        width: 25%;
+    .rejestracja {
         margin-right: 0;
         margin-left: 0;
     }
@@ -809,6 +852,26 @@ item {
         height: 64%;
     }
 
+
+    /* Ustawienia histori zamówień */
+
+    .order-pictures {
+        display: flex;
+        border-left: black solid 1px;
+        place-items: center;
+    }
+
+    .single-picture {
+        padding: 1em;
+    }
+
+    .purchase-history-header {
+        place-self: center;
+    }
+
+    .order-info {
+        width: 320px;
+    }
 }
 
 

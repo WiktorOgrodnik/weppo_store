@@ -1,31 +1,32 @@
 <%- include('layout-top', {}) %>
 <main >
+
     <form method="post">
-        <div class='order-personal-data' style="display: grid;">
+        <div class='login' style="display: grid;">
             <login-title class="account-title">Zaloguj się</login-title>
             <box-name>E-mail</box-name>
-            <input class="input" type="email" name="email" id="email">
+            <input class="form-input" type="email" name="email" id="email">
             <box-name>Hasło</box-name>
-            <input class="input" type="password" name="password" id="password">
+            <input class="form-input" type="password" name="password" id="password">
             <input type="hidden" value="<%= locals.returnUrl %>" name="returnurl">
             <button class="login-btn">Zaloguj się</button>
-            <span style="color: red;"><%= locals.serverMessage %></span>
+            <span class="error-message" style="color: red;"><%= locals.serverMessage %></span>
         </div>
     </form>
     
     <form method="post" action="/register">
-        <div class='order-personal-data' style="display: grid;">
+        <div class='rejestracja' style="display: grid;">
             <rejestracja-title class="account-title">Załóż konto</rejestracja-title>
             <box-name>E-mail</box-name>
-            <input class="input" type="email" name="email" id="email" value="<%= locals.regemail %>">
+            <input class="form-input" type="email" name="email" id="email" value="<%= locals.regemail %>">
             <box-name>Nr telefonu</box-name>
-            <input class='order-data-input' type="tel" name="tel" placeholder="Telefon" value="<%= locals.regtel %>">
+            <input class='form-input' type="tel" name="tel" placeholder="Telefon" value="<%= locals.regtel %>">
             <box-name>Hasło</box-name>
-            <input class="input" type="password" name="passwd" id="passwd">
+            <input class="form-input" type="password" name="passwd" id="passwd">
             <box-name>Powtórz hasło</box-name>
-            <input class="input" type="password" name="passwd2" id="passwd2">
+            <input class="form-input" type="password" name="passwd2" id="passwd2">
             <button class="register-btn">Załóż konto</button>
-            <span style="color: red;"><%= locals.serverMessageReg %></span>
+            <span class="error-message" style="color: red;"><%= locals.serverMessageReg %></span>
         </div>
     </form>
 </main>
