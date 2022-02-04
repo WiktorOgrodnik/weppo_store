@@ -1,4 +1,5 @@
 import { get, getWithCondition } from './dbconnect.js';
+import { Order } from './order.js';
 
 export async function getUsersCartId(user_id) {
     const cart_id = await (getWithCondition('orders3'))([user_id]);
@@ -36,6 +37,31 @@ export async function cartModule(cart_id, user_id, type) {
     }
 
     return {cart: products, cart_value: cart_value, cart_count: cart_count};
+}
+
+export async function addToCart(cart_id, user_id, product_id, ammount) {
+    if (user_id) cart_id = await getUsersCartId(user_id);
+    
+    if (!cart_id) {
+        const order = new Order(null, null, null, null, null, null, null, 0, 1, 0);
+        try {
+            cart_id = await order.add();
+            cart_id = cart_id.rows[0].order_id;
+
+            await Order.addToOrder(cart_id, product_id, ammount);
+        } catch (error) {
+            error.message = `Can not add new cart: ${error.message};`;
+            throw error;
+        }
+    }
+
+    try {
+        await Order.addToOrder(cart_id, product_id, ammount);
+    } catch (error) {
+        throw error;
+    } 
+
+    return cart_id;
 }
 
 export async function orderFormModule(cart_id, user_id) {

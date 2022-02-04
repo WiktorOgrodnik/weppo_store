@@ -163,7 +163,7 @@ function queryBuilder(query) {
         try {
             toReturn = await client.query(query, req);
         } catch (err) {
-            console.error(`Something unexpected happened for query: ${query}, more info ${err.stack}`);
+            throw new PoolException(query, err.stack);
         } finally {
             client.end();
         }
@@ -235,6 +235,7 @@ const getQueryWithCondition = {
     orders: 'SELECT * FROM orders WHERE order_id=$1;',
     orders2: 'SELECT * FROM orders WHERE order_id=$1 AND status_id > 1;',
     orders3: 'SELECT * FROM orders WHERE user_id=$1 AND status_id=1;',
+    orders4: 'SELECT * FROM orders WHERE user_id=$1 AND status_id>1;',
     products_orders: 'SELECT * FROM products_orders WHERE order_id=$1',
     products_orders2: `SELECT orders.status_id, table1.product_id, table1.order_id, table1.ammount, table1.price, table1.name, table1.image FROM 
                         (SELECT products_orders.product_id, products_orders.order_id, products_orders.ammount, products_orders.price, products.name, products.image 
