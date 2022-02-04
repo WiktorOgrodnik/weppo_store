@@ -415,6 +415,8 @@ app.get('/purchase_history', authorize(2, 3), (req, res) => {
 
         const orders = await (getWithCondition('orders4'))([req.session.user_id]);
 
+        const status = await (get('statuses'))();
+
         const carts = [];
         const pictures = [];
 
@@ -426,13 +428,34 @@ app.get('/purchase_history', authorize(2, 3), (req, res) => {
             pictures.push(k.cart.map(l => l.image));
         }
 
-        for (let k of pictures) {
-            console.log(k);
+        var i = 0;
+        for (let k of orders.rows) {
+            k.order_date = getDateTime(new Date(k.order_date));
+            k.pictures = pictures[i];
+            i++;
         }
 
-        res.render('purchase_history', {categories: categories.rows, orders: orders.rows});
+        for (let k of orders.rows) {
+            console.log(k.pictures instanceof Array);
+        }
+
+        res.render('purchase_history', {categories: categories.rows, orders: orders.rows, status: status.rows});
     })();
 });
+
+function getDateTime(isoDate) {
+    let hours = isoDate.getHours();
+    let minutes = isoDate.getMinutes();
+    let date = isoDate.getDate();
+    let month = isoDate.getMonth() + 1;
+
+    if (hours < 10) hours = '0' + hours;
+    if (minutes < 10) minutes = '0' + minutes;
+    if (date < 10) date = '0' + date;
+    if (month < 10) month = '0' + month;
+
+    return `${date}-${month}-${isoDate.getFullYear()}`;
+}
 
 app.get('/more-permissions-needed', (req, res) => {
     (async () => {
