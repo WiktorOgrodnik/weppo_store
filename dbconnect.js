@@ -1,4 +1,5 @@
 import Pool from 'pg/lib/client.js';
+import { PoolException } from './exceptions.js';
 const env = process.env.DB_ENVIRONMENT || "development";
 
 const db_data = {
@@ -7,7 +8,13 @@ const db_data = {
     production: process.env.DATABASE_URL
 };
 
+const express_secret = {
+    development: 'Y~R(l1OmOk+9neAG*!A<',
+    production: process.env.SESSION_SECRET
+}
+
 export const db = db_data[env];
+export const secret = express_secret[env];
 
 /* Code to create tables - don't use it */
 
@@ -157,7 +164,8 @@ function queryBuilder(query) {
         try {
             toReturn = await client.query(query, req);
         } catch (err) {
-            console.error(`Something unexpected happened for query: ${query}, more info ${err.stack}`);
+            console.log(err.stack);
+            throw new PoolException(query, err.stack);
         } finally {
             client.end();
         }
@@ -219,7 +227,8 @@ const getQuery = {
     categories_products: 'SELECT * FROM categories_products;',
     orders: 'SELECT * FROM orders;',
     deliveries: 'SELECT * FROM deliveries;',
-    payment_methods: 'SELECT * FROM payment_methods;'
+    payment_methods: 'SELECT * FROM payment_methods;',
+    statuses: 'SELECT * FROM statuses;'
 }
 
 const getQueryWithCondition = {
@@ -228,6 +237,8 @@ const getQueryWithCondition = {
     categories_products: 'SELECT * FROM (SELECT * FROM products LEFT JOIN categories_products ON products.product_id = categories_products.product_id) temp WHERE temp.category_id=$1;',
     orders: 'SELECT * FROM orders WHERE order_id=$1;',
     orders2: 'SELECT * FROM orders WHERE order_id=$1 AND status_id > 1;',
+    orders3: 'SELECT * FROM orders WHERE user_id=$1 AND status_id=1;',
+    orders4: 'SELECT * FROM orders WHERE user_id=$1 AND status_id>1;',
     products_orders: 'SELECT * FROM products_orders WHERE order_id=$1',
     products_orders2: `SELECT orders.status_id, table1.product_id, table1.order_id, table1.ammount, table1.price, table1.name, table1.image FROM 
                         (SELECT products_orders.product_id, products_orders.order_id, products_orders.ammount, products_orders.price, products.name, products.image 
@@ -263,7 +274,11 @@ const getQueryWithCondition = {
     payment_methods: 'SELECT * FROM payment_methods WHERE payment_method_id=$1;',
     users: 'SELECT * FROM users WHERE user_id=$1;',
     personal_data: 'SELECT * FROM personal_data WHERE perdata_id=$1;',
-    addresses: 'SELECT * FROM addresses WHERE adress_id=$1;'
+    addresses: 'SELECT * FROM addresses WHERE adress_id=$1;',
+    users_login: `SELECT * FROM users WHERE email=$1 AND can_login='1'`,
+    users_roles: `SELECT * FROM users_roles WHERE user_id=$1`,
+    email_register: `SELECT * FROM users RIGHT JOIN users_roles ON users.user_id = users_roles.user_id WHERE role_id>1 AND users.email=$1`,
+    tel_register: `SELECT * FROM users RIGHT JOIN users_roles ON users.user_id = users_roles.user_id WHERE role_id>1 AND users.tel=$1`
 }
 
 export function get(table) {
@@ -292,7 +307,13 @@ const updateQuery = {
         is_paid=$9,
         status_id=$10,
         price=$11
-    WHERE order_id=$1;`
+    WHERE order_id=$1;`,
+    add_cart_to_user: `UPDATE orders
+    SET user_id=$2
+    WHERE order_id=$1;`,
+    login_time: `UPDATE users
+    SET last_login=(TO_TIMESTAMP($2 / 1000.0))
+    WHERE user_id=$1;`
 }
 
 export function update(table) {
@@ -303,7 +324,8 @@ export function update(table) {
 
 const deleteQuery = {
     products_orders: `DELETE FROM products_orders
-    WHERE order_id=$1 AND product_id=$2;`
+    WHERE order_id=$1 AND product_id=$2;`,
+    orders: `DELETE FROM orders WHERE order_id=$1;`
 }
 
 export function deleted(table) {

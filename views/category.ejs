@@ -1,13 +1,11 @@
 <%- include('layout-top', {static_correction: './../', categories: locals.categories}) %>
-<main class='main-list'>
+<main class="main-list">
 
     <div class="item-list">
         <h3>Produkty z kategorii:</h3>
 
-        <all-items>
-
         <% if (locals.products.length) { %>
-            
+        <all-items>
             <% for (let i of locals.products) {%> 
                 <prod class="product">
                     <img src="./../img/<%= i.image %>" alt="img" width="231" height="200">
@@ -15,12 +13,12 @@
                     <price><%= i.price/100 %> zł</price>
                 </prod>
             <% } %>
+        </all-items>  
         
         <% } else { %>
-            <%- include('message-module', {static_correction: './..', message: 'Ta kategoria jest pusta'}); %>
+            <span class="message"><%- include('message-module', {static_correction: './..', message: 'Ta kategoria jest pusta'}); %></span>
         <% } %>
-    
-        </all-items>    
+      
     </div>
     
 

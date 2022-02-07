@@ -20,7 +20,7 @@ footer {
 }
 
 /* Strona logowania - wersja mobilna */
-login {
+.login {
     background-color: white;
     display: grid;
     height: auto;
@@ -33,7 +33,7 @@ login {
     margin-bottom: 1em;
 }
 
-rejestracja {
+.rejestracja {
     background-color: white;
     display: grid;
     border-radius: 1em;
@@ -331,6 +331,8 @@ empty-cart a {
     padding-left: 1.7em;
     padding-right: 1.7em;
     margin-top: .5em;
+    width: fit-content;
+    place-self: center;
 }
 
 .order-cart {
@@ -492,7 +494,170 @@ item {
 
 .delivery-info-description {
     font-weight: bold;
-    color: rgb(26, 26, 26);
+    color: rgb(77, 77, 77);
+}
+
+.error-message {
+    width: 200px;
+}
+
+.message {
+    place-self: center ;
+}
+
+/* Ustawienia strony konta */
+.acc-info {
+    padding: .5em;
+    border: black solid 1px;
+    border-radius: .3em;
+    display: grid;
+    background-color: white;
+}
+
+.header-acc {
+    margin-bottom: .3em;
+    font-size: 1.1em;
+}
+
+.del-acc {
+    border-radius: 3em;
+    height: 40px;
+    width: fit-content;
+    padding-left: 3em;
+    padding-right: 3em;
+    background-color: green;
+    border-style: none;
+}
+
+.del-acc-final {
+    border-radius: 3em;
+    height: 40px;
+    width: fit-content;
+    padding-left: 2em;
+    padding-right: 2em;
+    background-color: red;
+    color: white;
+    border-style: none;
+    font-weight: bolder;
+}
+
+.del-pop-up {
+    background-color: white;
+    position: fixed;
+    z-index: 999;
+    border: black solid 1px;
+    border-radius: 1em;
+    padding: 1em;
+    margin-right: .5em;
+    place-self: center;
+}
+
+.del-acc-close {
+    width: 30px;
+    height: 30px;
+}
+
+.header-del-pop-up {
+    display: flex;
+    place-content: space-between;
+}
+
+.search-selector {
+    margin-left: .5em;
+    border: black solid 1px;
+    border-radius: 1em;
+    background-color: white;
+    padding: .6em;
+}
+
+.edit-on {
+    display: grid;
+    padding: 1em;
+}
+
+.editor-on {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    
+    background-color: white;
+}
+
+.form-save-btn {
+    margin-top: 2em;
+    border-radius: 3em;
+    height: 40px;
+    width: fit-content;
+    padding-left: 3em;
+    padding-right: 3em;
+    background-color: green;
+    border-style: none;
+}
+
+.header-form {
+    display: flex;
+    place-content: space-between;
+}
+
+.form-input {
+    border: black solid 1px;
+    border-radius: 1em;
+    padding: .7em;
+    width: 90%;
+}
+
+.edit-on-form {
+    display: grid;
+}
+
+.main-account {
+    display: grid;
+    padding-left: .5em;
+    padding-right: .5em;
+}
+
+/* Ustawienia histori zamówień */
+
+.main-purchase-history {
+    display: grid;
+    margin-left: .8em;
+    margin-right: .8em;
+}
+
+.single-order {
+    display: flex;
+    text-decoration: none;
+    color: black;
+    border: black solid 1px;
+    border-radius: 1em;
+    background-color: white;
+    margin-bottom: 1em;
+}
+
+.order-header {
+    font-size: larger;
+}
+
+.order-nr {
+    color: rgb(77, 77, 77);
+    font-size: smaller;
+}
+
+.order-date {
+    color: rgb(29, 29, 29);
+}
+
+.order-info {
+    display: grid;
+    padding: 1em;
+}
+
+.order-pictures {
+    display: none;
 }
 
 
@@ -584,15 +749,13 @@ item {
         text-align: center;
     }
 
-    login {
+    .login {
         height: fit-content;
-        width: 25%;
         margin-right: 0;
         margin-left: 0;
     }
 
-    rejestracja {
-        width: 25%;
+    .rejestracja {
         margin-right: 0;
         margin-left: 0;
     }
@@ -674,6 +837,41 @@ item {
         width: 35%;
     }
 
+    /* Strona konta */
+
+    .main-account {
+        width: 50%;
+    }
+
+    .editor-on {
+        border: black solid 1px;
+        border-radius: 1em;
+        top: auto;
+        left: auto;
+        width: 49%;
+        height: 64%;
+    }
+
+
+    /* Ustawienia histori zamówień */
+
+    .order-pictures {
+        display: flex;
+        border-left: black solid 1px;
+        place-items: center;
+    }
+
+    .single-picture {
+        padding: 1em;
+    }
+
+    .purchase-history-header {
+        place-self: center;
+    }
+
+    .order-info {
+        width: 320px;
+    }
 }
 
 

@@ -1,7 +1,29 @@
 <%- include('layout-top', {}) %>
-<main>
-    <h1>Zamówienia</h1>
+<main class="main-purchase-history">
 
+    <h1 class="purchase-history-header">Historia Zamówień</h1>
+
+
+    <div class="history-box">
+    <% for (let i of orders) { %>
+        <a href='../orders/<%= i.order_id %>' class="single-order">
+            <div class="order-info">
+                <span class="order-header"><%= status[i.status_id - 1].name %></span>
+                <span class="order-date"><%= i.order_date %></span>
+                <span class="order-nr">nr. <%= i.order_id %></span>
+                <span><%= i.price/100 %> zł</span>
+            </div>
+            <div class="order-pictures">
+                <% var z = 0; %>
+                <% for (let k of i.pictures) { %>
+                    <img class="single-picture" height="70" width="70" src="../img/<%= k %>" alt="">
+                    <% if(z++ > 3){ break; }
+                        else {z+=1}%>
+                <% } %>
+            </div>
+        </a>
+    <% } %>
+    </div>
 
 </main>
 <%- include('layout-bottom', {}) %>

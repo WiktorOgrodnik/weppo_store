@@ -1,4 +1,6 @@
-import { get, getWithCondition, add, update, deleted } from './dbconnect.js';
+import { get, getWithCondition, update, deleted } from './dbconnect.js';
+import { ApiException } from './exceptions.js';
+import { addToCart, deleteFromCart, getUsersCartId } from './modules.js';
 
 export function initApi(app) {
 
@@ -15,26 +17,26 @@ export function initApi(app) {
         (async () => {
             const product_id = req.params.id;
             const ammount = req.params.ammount;
-    
-            const product = await (getWithCondition('products'))([product_id]);
-            const product_price = product.rows[0].price;
-    
-            if (!req.cookies.cart_id) {
-                const order = await (add('orders'))([null, null, null, null, null, null, null, 0, 1, 0]);
-                const order_id = order.rows[0].order_id;
-    
-                (add('products_orders'))([product_id, order_id, ammount, product_price]);
-                res.cookie('cart_id', order_id);
-            } else {
-                const order_id = req.cookies.cart_id;
-                const products_orders = await (getWithCondition('products_orders3'))([order_id, product_id]);
-    
-                if (products_orders.rows.length) (update('products_orders'))([order_id, product_id, +products_orders.rows[0].ammount + +ammount, products_orders.rows[0].price]);
-                else (add('products_orders'))([product_id, order_id, ammount, product_price]);
+            const user_id = req.session.user_id;
+            let cart_id = req.cookies.cart_id;
+
+            try {
+                cart_id = await addToCart(cart_id, user_id, product_id, ammount);
+
+                if (!req.session.loggedin) res.cookie('cart_id', cart_id);
+        
+                res.setHeader('Content-type', 'text/plain; charset=utf8;');
+                res.end('Ok');
+            } catch (error) {
+                if (error instanceof ApiException) {
+                    res.setHeader('Content-type', 'text/plain; charset=utf8;');
+                    res.end(error.message);
+                } else {
+                    console.error (`Podczas dodawania artykułów do koszyka wszystapił błąd: ${error.message}, zapytanie: ${error.query}`);
+                    res.setHeader('Content-type', 'text/plain; charset=utf8;');
+                    res.end('Problems with loading data');
+                }
             }
-    
-            res.setHeader('Content-type', 'text/plain; charset=utf8;');
-            res.end('Ok');
         })();
     });
     
@@ -42,19 +44,25 @@ export function initApi(app) {
         (async () => {
             const product_id = req.params.id;
             const ammount = req.params.ammount;
-            const order_id = req.cookies.cart_id
-            let response = 'less';
-    
-            if (order_id) {
-                const product_order = await (getWithCondition('products_orders3'))([order_id, product_id]);
-    
-                if (product_order.rows.length && product_order.rows[0].ammount > ammount) {
-                    (update('products_orders'))([order_id, product_id, product_order.rows[0].ammount - ammount, product_order.rows[0].price]);
-                } else if (product_order.rows.length && product_order.rows[0].ammount == ammount) {
-                    (deleted('products_orders'))([order_id, product_id]);
+            const user_id = req.session.user_id;
+            let cart_id = req.cookies.cart_id;
+            let response = 'less'; 
+
+            try {
+                response = await deleteFromCart(cart_id, user_id, product_id, ammount);
+            } catch (error) {
+                if (error instanceof ApiException) {
+                    response = error.message;
+                } else {
+                    console.error (`Podczas usuwania artykułów z koszyka wystapił błąd: ${error.message}, zapytanie: ${error.query}`);
+                    response = 'Problems with loading data';
+                }
+            } finally {
+                if (response == 'nonenone') {
+                    res.clearCookie('cart_id');
                     response = 'none';
                 }
-            } 
+            }
     
             res.setHeader('Content-type', 'text/plain; charset=utf8;');
             res.end(response);
