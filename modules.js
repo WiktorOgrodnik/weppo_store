@@ -1,4 +1,4 @@
-import { get, getWithCondition, update } from './dbconnect.js';
+import { get, getWithCondition } from './dbconnect.js';
 import { Order } from './order.js';
 
 export async function getUsersCartId(user_id) {
@@ -58,7 +58,7 @@ export async function addToCart(cart_id, user_id, product_id, ammount) {
         await Order.addToOrder(cart_id, product_id, ammount);
     } catch (error) {
         throw error;
-    } 
+    }
 
     return cart_id;
 }
