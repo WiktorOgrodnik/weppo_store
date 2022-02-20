@@ -10,6 +10,7 @@ import { cartModule, getUsersCartId, orderFormModule } from './modules.js'
 import { validators } from './validators.js';
 import { authorize } from './authorize.js';
 import { Categories } from './categories.js';
+import { User } from './user.js';
 
 Object.prototype.isEmpty = function () {
     return Object.keys(this).length == 0;
@@ -48,20 +49,21 @@ app.get('/', async (req, res) => {
 app.get('/order', async (req, res) => {
     const cart_id = req.cookies.cart_id;
     const user_id = req.session.user_id;
+    const categories = await Categories.load();
     const data = await orderFormModule(cart_id, user_id);
     let email = '';
     let tel = '';
 
     if (user_id) {
-        const perdata = await (getWithCondition('users'))([user_id]);
-        if (perdata?.rows?.length > 0) {
+        const user = await (getWithCondition('users'))([user_id]);
+        if (user?.rows?.length > 0) {
             email = perdata.rows[0].email;
             tel = perdata.rows[0].tel;
         }
     }
 
     if (data.cart_count == 0) res.redirect('/cart');
-    else res.render('order', Object.assign(data, {email: email, tel: tel}));
+    else res.render('order', Object.assign(data, {email: email, tel: tel, categories: categories.rows}));
 });
 
 app.post('/order', async (req, res) => {
@@ -261,22 +263,23 @@ app.post('/login', authorize(1), async (req, res) => {
     const email = req.body.email;
     const passwd = req.body.password;
     const returnUrl = req.body.returnUrl ?? '/';
-    let categories = await Categories.load();
+    const categories = await Categories.load();
     if (email && passwd) {
-        bcrypt.compareSync("B4c0/\/", passwd);
-        const user = await (getWithCondition('users_login'))([email]);
-        if (user.rows?.length > 0 && bcrypt.compareSync(passwd, user.rows[0].passwd)) {
+        try {
+            const user = await User.getUserByEmailAndPasswd(email, passwd);
             req.session.loggedin = true;
-            req.session.user_id = user.rows[0].user_id;
+            req.session.user_id = user.user_id;
+            req.session.user = user;
 
-            await (update('login_time'))([req.session.user_id, Date.now()]);
-            if (req.cookies.cart_id && !(await getUsersCartId(req.session.user_id))) {
-                await (update('add_cart_to_user'))([req.cookies.cart_id, req.session.user_id]);
+            user.updateLastLogin(Date.now());
+            if (!await getUsersCartId(user.user_id)) {
+                user.addCart(req.cookies.cart_id);
             }
 
             res.clearCookie('cart_id');
             res.redirect(returnUrl);
-        } else {
+        } catch (error) {
+            console.error(error.message);
             res.render('login', {categories: categories.rows, returnUrl: returnUrl, serverMessage: 'Email lub hasło są nieprawidłowe!'});
         }
     } else {

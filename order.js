@@ -79,9 +79,8 @@ export class Order {
                 } else {
                     await (deleted('products_orders'))([order_id, product_id]);
     
-                    const cart = await (getWithCondition('products_orders'))([cart_id]);
+                    const cart = await (getWithCondition('products_orders'))([order_id]);
                     if (!cart?.rows?.length) {
-                        console.log('nonenone');
                         await (deleted('orders'))([order_id]);
                         return 'nonenone';
                     } else {
@@ -92,7 +91,7 @@ export class Order {
                 throw new ApiException('Nothing to delete!');
             }
         } catch (error) {
-            error.message = `Can not delete from order (deleteFromOrder): ${error.status_id}`;
+            error.message = `Can not delete from order (deleteFromOrder): ${error}`;
             throw error;
         }
     }
