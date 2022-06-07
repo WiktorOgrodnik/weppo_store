@@ -1,10 +1,14 @@
-import { get, getWithCondition, update } from './dbconnect.js';
+import { get, getWithCondition } from './dbconnect.js';
 import { Order } from './order.js';
 
 export async function getUsersCartId(user_id) {
-    const cart_id = await (getWithCondition('orders3'))([user_id]);
-    if (cart_id?.rows?.length > 0) {
-        return cart_id.rows[0].order_id;
+    try {
+        const cart_id = await (getWithCondition('orders3'))([user_id]);
+        if (cart_id?.rows?.length > 0) {
+            return cart_id.rows[0].order_id;
+        }
+    } catch (error) {
+        return undefined;
     }
 }
 
@@ -58,7 +62,7 @@ export async function addToCart(cart_id, user_id, product_id, ammount) {
         await Order.addToOrder(cart_id, product_id, ammount);
     } catch (error) {
         throw error;
-    } 
+    }
 
     return cart_id;
 }
@@ -80,7 +84,6 @@ export async function deleteFromCart(cart_id, user_id, product_id, ammount) {
 }
 
 export async function orderFormModule(cart_id, user_id) {
-    const categories = await (get('categories'))();
     const cart = await cartModule(cart_id, user_id, 'cart');
 
     const payment_methods = await (get('payment_methods')());

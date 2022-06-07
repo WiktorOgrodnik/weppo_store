@@ -159,12 +159,14 @@ function queryBuilder(query) {
     return async function (req) {
         const client = new Pool({connectionString: db, idleTimeoutMillis: 100});
         let toReturn = {};
-
+        
+        //console.log(`query: ${query}, req: ${req}`);
         await client.connect();
         try {
             toReturn = await client.query(query, req);
         } catch (err) {
             console.log(err.stack);
+            console.log('No error xd');
             throw new PoolException(query, err.stack);
         } finally {
             client.end();
@@ -308,6 +310,16 @@ const updateQuery = {
         status_id=$10,
         price=$11
     WHERE order_id=$1;`,
+    users: `UPDATE users
+    SET email=$2,
+        tel=$3,
+        passwd=$4,
+        can_login=$5,
+        is_verified=$6,
+        perdata_def_id=$7,
+        created_on=$8,
+        last_login=$9
+    WHERE user_id=$1;`,
     add_cart_to_user: `UPDATE orders
     SET user_id=$2
     WHERE order_id=$1;`,
