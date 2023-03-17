@@ -15,6 +15,15 @@ export class User {
         this.last_login = last_login;
     }
 
+    async add() {
+        try {
+            return await (add('users'))([this.email, this.tel, this.passwd, this.can_login, this.is_verified, this.perdata_def_id, this.last_login]);
+        } catch (error) {
+            error.message = `User.add(): ${error.message}`;
+            throw error;
+        }
+    }
+
     async save() {
         try {
             (update('users'))(Object.keys(this).map(k => this[k]));

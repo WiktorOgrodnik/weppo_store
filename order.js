@@ -19,7 +19,10 @@ export class Order {
 
     async add() {
         try {
-            return await (add('orders'))(Object.keys(this).map(k => this[k]).slice(1));
+            let user_id = await (add('orders'))(Object.keys(this).map(k => this[k]).slice(1));
+            user_id = user_id.rows[0];
+            this.user_id = user_id;
+            return user_id;
         } catch (error) {
             error.message = `Order.add(): ${error.message}`;
             throw error;

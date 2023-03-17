@@ -339,15 +339,15 @@ app.post('/register', async (req, res) => {
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(passwd, salt);
 
-        const user_inserted = await (add('users')([email, tel, hash, 1, 1, null, null]));
-        if (user_inserted?.rows?.length > 0) {
-            const user_id = user_inserted.rows[0].user_id;
+        const user = new User(email, tel, hash, 1, 1, null, null);
+        try {
+            const user_id = user.add();
             await (add('users_roles')([user_id, 2])); //normal user permissions
-                
             req.session.registered = true;
-
             res.redirect('/registration-successful');
-        } else {
+
+
+        } catch {
             console.error('Something went wrong!');
             res.end('Something went wrong!')
         }
@@ -392,8 +392,8 @@ app.get('/purchase_history', authorize(2, 3), async (req, res) => {
     const carts = [];
     const pictures = [];
 
-    for (let index of orders.rows) {
-        carts.push(await (cartModule(index.order_id, null, 'order')));
+    for (let k of orders.rows) {
+        carts.push(await (cartModule(k.order_id, null, 'order')));
     }
 
     for(let k of carts) {
